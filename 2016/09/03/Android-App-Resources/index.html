@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans,en,zh-tw,default">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,res,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="白天有朋友问我了一个关于Android res下Mipmap的问题，现在突然心血来潮想要看看有关于这一方面的东西。关于Android App Resources的问题并不想代码一样麻烦，我们可以直接去Android Developer上查看相关的描述。我也向通过这篇blog来巩固一下有关与res的知识。整篇基本概括了Android Develope对Resources一些简单解析。">
+<meta name="keywords" content="Android,res">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android App Resources (draft)">
+<meta property="og:url" content="http://yoursite.com/2016/09/03/Android-App-Resources/index.html">
+<meta property="og:site_name" content="whguardian&#39;s Blog">
+<meta property="og:description" content="白天有朋友问我了一个关于Android res下Mipmap的问题，现在突然心血来潮想要看看有关于这一方面的东西。关于Android App Resources的问题并不想代码一样麻烦，我们可以直接去Android Developer上查看相关的描述。我也向通过这篇blog来巩固一下有关与res的知识。整篇基本概括了Android Develope对Resources一些简单解析。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-14T07:57:34.204Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android App Resources (draft)">
+<meta name="twitter:description" content="白天有朋友问我了一个关于Android res下Mipmap的问题，现在突然心血来潮想要看看有关于这一方面的东西。关于Android App Resources的问题并不想代码一样麻烦，我们可以直接去Android Developer上查看相关的描述。我也向通过这篇blog来巩固一下有关与res的知识。整篇基本概括了Android Develope对Resources一些简单解析。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/03/Android-App-Resources/">
+
+
+
+
+
+  <title>Android App Resources (draft) | whguardian's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">whguardian's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/03/Android-App-Resources/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="whguardian">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="whguardian's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android App Resources (draft)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-03T00:01:43+00:00">
+                2016-09-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/XML/" itemprop="url" rel="index">
+                    <span itemprop="name">XML</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/09/03/Android-App-Resources/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/09/03/Android-App-Resources/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>白天有朋友问我了一个关于Android res下Mipmap的问题，现在突然心血来潮想要看看有关于这一方面的东西。关于Android App Resources的问题并不想代码一样麻烦，我们可以直接去Android Developer上查看相关的描述。我也向通过这篇blog来巩固一下有关与res的知识。<br>整篇基本概括了Android Develope对Resources一些简单解析。  </p>
+<a id="more"></a>
+<h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>我们在开发时应该将需要的资源外部化，这些资源包括图像，字符串（例：将Button的text保存到res下而不是直接输入是一个好习惯），并且，通过将资源外部化还可以适配不同的设备。<br>我们在引用资源时不许确保至少有一个被指定的资源，一般情况下每一个资源都将存在一个默认资源，并且通过<strong>配置修饰符</strong>设置<strong>可选资源</strong>。  </p>
+<ul>
+<li>每一个资源都应该存在一个默认资源防止运行奔溃。</li>
+<li>通过配置修饰符用于指定特定配置的资源 。</li>
+<li>配置修饰符可以连用。</li>
+</ul>
+<h3 id="提供资源"><a href="#提供资源" class="headerlink" title="提供资源"></a>提供资源</h3><p>将应用的资源外部化有利于对资源的维护</p>
+<h4 id="资源文件分类"><a href="#资源文件分类" class="headerlink" title="资源文件分类"></a>资源文件分类</h4><p>在创建Android Project时，Android Studio将自动在main\res下生成部分资源目录与路径</p>
+
+<p>这是一个在创建拥有一个空白Activity时生成的res，包括<strong>drawable</strong>(图像)，<strong>layout</strong>(布局)，启动器图标的<strong>mimap</strong>，<strong>values</strong>(简单值)，values中又包括<strong>colors，dimens，strings，styles</strong>。</p>
+<blockquote>
+<p>区分mipmap与drawable的不同，mipmap并不是为了替代drawable</p>
+</blockquote>
+<p><strong>表1</strong>.项目 res/ 目录内支持的资源目录</p>
+<table>
+<thead>
+<tr>
+<th>目录</th>
+<th>资源类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>animator/</td>
+<td>用于定义<a href="https://developer.android.com/guide/topics/graphics/prop-animation.html" target="_blank" rel="noopener">属性动画</a>的XML文件。</td>
+</tr>
+<tr>
+<td>anim/</td>
+<td>定义<a href="https://developer.android.com/guide/topics/graphics/view-animation.html#tween-animation" target="_blank" rel="noopener">渐变动画</a>的XML文件。</td>
+</tr>
+<tr>
+<td>color/</td>
+<td></td>
+</tr>
+<tr>
+<td>drawable/</td>
+<td></td>
+</tr>
+<tr>
+<td>mipmap/</td>
+<td></td>
+</tr>
+<tr>
+<td>layout/</td>
+<td>用于定义用户界面布局的XML文件。<a href="https://developer.android.com/guide/topics/resources/layout-resource.html" target="_blank" rel="noopener">布局资源</a>。</td>
+</tr>
+<tr>
+<td>menu/</td>
+<td></td>
+</tr>
+<tr>
+<td>raw/</td>
+<td></td>
+</tr>
+<tr>
+<td>values/</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h5 id="关于mipmap"><a href="#关于mipmap" class="headerlink" title="关于mipmap"></a>关于mipmap</h5><p>网上流传这一种神奇的说法，Google推荐使用mipmap替换drawable，但是事实上，Android Developer上只是推荐将启动器图标放置到mipmap中，除此之外mipmap暂时没有其他任何的作用。以下是在Android Developer中关于<strong>管理启动器图标作为mipmap资源</strong>的原文</p>
+<p>原文地址: <a href="https://developer.android.com/studio/write/image-asset-studio.html" target="_blank" rel="noopener">Add Bitmap Images with Image Asset Studio</a></p>
+<blockquote>
+<p><strong>Managing Launcher Icons as mipmap Resources</strong></p>
+<hr>
+<p>Different home screen launcher apps on different devices show app<br>launcher icons at various resolutions. When app resource optimization techniques remove resources for unused screen densities, launcher icons can wind up looking fuzzy because the launcher app has to upscale a lower-resolution icon for display. To avoid these display issues, apps should use the mipmap/ resource folders for launcher icons. The Android system preserves these resources regardless of density stripping, and ensures that launcher apps can pick icons with the best resolution for display.<br>Make sure launcher apps show a high-resolution icon for your app by moving all densities of your launcher icons to density-specific res/mipmap/ folders (for example res/mipmap-mdpi/ and res/mipmap-xxxhdpi/). The mipmap/ folders replace the drawable/ folders for launcher icons. For xxhpdi launcher icons, be sure to add the higher resolution xxxhdpi versions of the icons to enhance the visual experience of the icons on higher resolution devices.</p>
+<blockquote>
+<p><strong>Note</strong>: Even if you build a single APK for all devices, it is still best practice to move your launcher icons to the mipmap/ folders.</p>
+</blockquote>
+</blockquote>
+<h4 id="配置修饰符"><a href="#配置修饰符" class="headerlink" title="配置修饰符"></a>配置修饰符</h4><p><strong>表2</strong>.配置修饰符</p>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>配置</th>
+<th>修饰符值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Country Code</td>
+<td>示例：mcc310</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>Network Code</td>
+<td>示例：mnc004</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Locale</td>
+<td>示例：en fr zh-cn</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Layout Direction</td>
+<td>ldrtl ldltr</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Smallest Screen Width</td>
+<td>sw &lt; N &gt; dp<br>示例：sw320dp</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Screen Width</td>
+<td>w &lt; N &gt; dp</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Screen Height</td>
+<td>h &lt; N &gt; dp</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Size</td>
+<td>small<br>normal<br>Large X-Large</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Ratio</td>
+<td>long<br>notlong</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Orientation</td>
+<td>port<br>land</td>
+</tr>
+<tr>
+<td>11</td>
+<td>UI mode</td>
+<td>car<br>desk<br>television appliance watch</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Nigth Mode</td>
+<td>night<br>notnight</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Density</td>
+<td>nodpi<br>anydpi<br>ldpi<br>mdpi<br>hdpi<br>x-hdpi<br>xx-hdpi<br>xxx-hdpi</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Touch Mode</td>
+<td>notouch<br>stylus<br>finger</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Keyboard</td>
+<td>keysexposed<br>keyshiden keyssoft</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Text Input</td>
+<td>nokeys<br>qwerty<br>12key</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Navigation State</td>
+<td>navexposed<br>navhidden</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Navigation Method</td>
+<td>nonav<br>dpad<br>trackball wheel</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Dimension</td>
+<td>&lt; M &gt; x &lt; N &gt;<br> 示例:320x426</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Version</td>
+<td>示例：v21</td>
+<td><a href="#apiLexel">附录</a></td>
+</tr>
+</tbody>
+</table>
+<h4 id="资源"><a href="#资源" class="headerlink" title="资源"></a>资源</h4><h4 id="资源ID"><a href="#资源ID" class="headerlink" title="资源ID"></a>资源ID</h4><h3 id="访问资源"><a href="#访问资源" class="headerlink" title="访问资源"></a>访问资源</h3><h3 id="本地化"><a href="#本地化" class="headerlink" title="本地化"></a>本地化</h3><h3 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h3><h4 id="API-Level"><a href="#API-Level" class="headerlink" title="API Level"></a><a id="apiLexel">API Level</a></h4><table>
+<thead>
+<tr>
+<th>Platform Version</th>
+<th>API Level</th>
+<th>VERSION_CODE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Android 7.0</td>
+<td>24</td>
+<td>NOUGAT</td>
+</tr>
+<tr>
+<td>Android 6.0</td>
+<td>23</td>
+<td>MARSHMALLOW</td>
+</tr>
+<tr>
+<td>Android 5.1</td>
+<td>22</td>
+<td>LOLOPOP_MR1</td>
+</tr>
+<tr>
+<td>Android 5.0</td>
+<td>21</td>
+<td>LOLIPOP</td>
+</tr>
+<tr>
+<td>Android 4.4w</td>
+<td>20</td>
+<td>KITKAT_WATCH</td>
+</tr>
+<tr>
+<td>Android 4.4</td>
+<td>19</td>
+<td>KITKAT</td>
+</tr>
+<tr>
+<td>Android 4.3</td>
+<td>18</td>
+<td>JELLY_BEAN_MR2</td>
+</tr>
+<tr>
+<td>Android 4.2,4.2.2</td>
+<td>17</td>
+<td>JELLY_BEAN_MR1</td>
+</tr>
+<tr>
+<td>Android 4.1,4.1.1</td>
+<td>16</td>
+<td>JELLY_BEAN </td>
+</tr>
+<tr>
+<td>Android 4.0.3,4.0.4</td>
+<td>15</td>
+<td>ICE_CREAM_SANDWICH_MR1</td>
+</tr>
+<tr>
+<td>Android 4.0, 4.0.1, 4.0.2</td>
+<td>14</td>
+<td>ICE_CREAM_SANDWICH</td>
+</tr>
+<tr>
+<td>Android 3.2</td>
+<td>13</td>
+<td>HONEYCOMB_MR2</td>
+</tr>
+<tr>
+<td>Android 3.1.x</td>
+<td>12</td>
+<td>HONEYCOMB_MR1</td>
+</tr>
+<tr>
+<td>Android 3.0.x</td>
+<td>11</td>
+<td>HONEYCOMB</td>
+</tr>
+<tr>
+<td>Android 2.3.4<br>Android 2.3.3</td>
+<td>10</td>
+<td>GINGERBREAD_MR1</td>
+</tr>
+<tr>
+<td>Android 2.3.2<br>Android 2.3.1<br>Android 2.3</td>
+<td>9</td>
+<td>GINGERBREAD</td>
+</tr>
+<tr>
+<td>Android 2.2.x</td>
+<td>8</td>
+<td>FROYO</td>
+</tr>
+<tr>
+<td>Android 2.1.x</td>
+<td>7</td>
+<td>ECLAIR_MR1</td>
+</tr>
+<tr>
+<td>Android 2.0.1</td>
+<td>6</td>
+<td>ECLAIR_0_1</td>
+</tr>
+<tr>
+<td>Android 2.0</td>
+<td>5</td>
+<td>ECLAIR</td>
+</tr>
+<tr>
+<td>Android 1.6</td>
+<td>4</td>
+<td>DONUT</td>
+</tr>
+<tr>
+<td>Android 1.5</td>
+<td>3</td>
+<td>CUPCAKE</td>
+</tr>
+<tr>
+<td>Android 1.1</td>
+<td>2</td>
+<td>BASE_1_1</td>
+</tr>
+<tr>
+<td>Android 1.0</td>
+<td>1</td>
+<td>BASE</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/res/" rel="tag"># res</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/01/Java-Thread-about-Thread-and-Runnable/" rel="next" title="Java Thread about Thread and Runnable">
+                <i class="fa fa-chevron-left"></i> Java Thread about Thread and Runnable
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/07/REST-a-simple-desgin/" rel="prev" title="REST a simple desgin">
+                REST a simple desgin <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">whguardian</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/whguardian" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/whguardian" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/3938192975" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#提供资源"><span class="nav-number">2.</span> <span class="nav-text">提供资源</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#资源文件分类"><span class="nav-number">2.1.</span> <span class="nav-text">资源文件分类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#关于mipmap"><span class="nav-number">2.1.1.</span> <span class="nav-text">关于mipmap</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置修饰符"><span class="nav-number">2.2.</span> <span class="nav-text">配置修饰符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源"><span class="nav-number">2.3.</span> <span class="nav-text">资源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#资源ID"><span class="nav-number">2.4.</span> <span class="nav-text">资源ID</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问资源"><span class="nav-number">3.</span> <span class="nav-text">访问资源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本地化"><span class="nav-number">4.</span> <span class="nav-text">本地化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#附录"><span class="nav-number">5.</span> <span class="nav-text">附录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#API-Level"><span class="nav-number">5.1.</span> <span class="nav-text">API Level</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">whguardian</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://whguardian.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2016/09/03/Android-App-Resources/';
+          this.page.identifier = '2016/09/03/Android-App-Resources/';
+          this.page.title = 'Android App Resources (draft)';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://whguardian.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

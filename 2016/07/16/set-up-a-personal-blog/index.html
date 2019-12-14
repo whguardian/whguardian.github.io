@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans,en,zh-tw,default">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Github,Git,Disqus,Hexo,NexT,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="一个自建的博客向来是一件很酷的事情，但也往往是一件很(╯°Д°)╯︵ ┻━┻ 的事情，所以，选择一个简单的方法可以…….，→_→。Github + Hexo是就是这么一个简单粗暴的组合。接下来我建立博客的过程记录下来。以下是需要使用的环境，框架等等……">
+<meta name="keywords" content="Github,Git,Disqus,Hexo,NexT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="个人博客搭建记录 —— Github + Hexo">
+<meta property="og:url" content="http://yoursite.com/2016/07/16/set-up-a-personal-blog/index.html">
+<meta property="og:site_name" content="whguardian&#39;s Blog">
+<meta property="og:description" content="一个自建的博客向来是一件很酷的事情，但也往往是一件很(╯°Д°)╯︵ ┻━┻ 的事情，所以，选择一个简单的方法可以…….，→_→。Github + Hexo是就是这么一个简单粗暴的组合。接下来我建立博客的过程记录下来。以下是需要使用的环境，框架等等……">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-14T07:57:34.204Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="个人博客搭建记录 —— Github + Hexo">
+<meta name="twitter:description" content="一个自建的博客向来是一件很酷的事情，但也往往是一件很(╯°Д°)╯︵ ┻━┻ 的事情，所以，选择一个简单的方法可以…….，→_→。Github + Hexo是就是这么一个简单粗暴的组合。接下来我建立博客的过程记录下来。以下是需要使用的环境，框架等等……">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/07/16/set-up-a-personal-blog/">
+
+
+
+
+
+  <title>个人博客搭建记录 —— Github + Hexo | whguardian's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">whguardian's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/07/16/set-up-a-personal-blog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="whguardian">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="whguardian's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">个人博客搭建记录 —— Github + Hexo</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-07-16T14:10:00+00:00">
+                2016-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Blog/" itemprop="url" rel="index">
+                    <span itemprop="name">Blog</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Blog/博客/" itemprop="url" rel="index">
+                    <span itemprop="name">博客</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Blog/博客/Github/" itemprop="url" rel="index">
+                    <span itemprop="name">Github</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/07/16/set-up-a-personal-blog/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/07/16/set-up-a-personal-blog/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>一个自建的博客向来是一件很酷的事情，但也往往是一件很(╯°Д°)╯︵ ┻━┻ 的事情，所以，选择一个简单的方法可以…….，→_→。Github + Hexo是就是这么一个简单粗暴的组合。接下来我建立博客的过程记录下来。<br>以下是需要使用的环境，框架等等……</p>
+<a id="more"></a>
+<p>搭建工具:   </p>
+<table>
+<thead>
+<tr>
+<th>Tools</th>
+<th>URL</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hexo</td>
+<td><a href="https://hexo.io" target="_blank" rel="noopener">hexo.io</a></td>
+<td>静态博客框架</td>
+</tr>
+<tr>
+<td>Git</td>
+<td><a href="http://git-scm.com" target="_blank" rel="noopener">git-scm.com</a></td>
+<td>分布式版本控制系统</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td><a href="https://nodejs.org/en/" target="_blank" rel="noopener">nodejs.org/en</a></td>
+<td>JS运行环境                                    </td>
+</tr>
+<tr>
+<td>NexT</td>
+<td><a href="http://theme-next.iissnan.com/" target="_blank" rel="noopener">theme-next.iissnan.com</a></td>
+<td>博客主题</td>
+</tr>
+<tr>
+<td>Disqus</td>
+<td><a href="https://disqus.com/" target="_blank" rel="noopener">disqus.com</a></td>
+<td>社会化评论系统</td>
+</tr>
+<tr>
+<td>Github</td>
+<td><a href="https://github.com" target="_blank" rel="noopener">github.com</a></td>
+<td>博客搭建位置</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ps: 本文仅针对Windows用户，Mac OS， Linux用户 谢谢惠顾</strong></p>
+<hr>
+<h3 id="Github-Hexo创建博客"><a href="#Github-Hexo创建博客" class="headerlink" title="Github + Hexo创建博客"></a>Github + Hexo创建博客</h3><p>整个个人博客是建立与Github + Hexo。<br>Github为我们提供了一个免费空间以帮助我们创建博客，Hexo可以在本地生成博客，并将它发布到Github上。</p>
+<h4 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h4><p>我们需要搭建的个人博客依赖于Github，这是一个免费的开源代码库以及版本控制系统（什么！！！你不知道Github，那你现在看到的博客是在什么地方，出门左转去看看Github）。</p>
+<h5 id="注册Github"><a href="#注册Github" class="headerlink" title="注册Github"></a>注册Github</h5><p>想要在Github上创建一个个人博客，需要<strong>申请一个Github的账号</strong>。申请过程如下：… … … …（博主实在太懒，其实只是需要一个邮箱注册）。</p>
+<h5 id="在Github上创建仓库"><a href="#在Github上创建仓库" class="headerlink" title="在Github上创建仓库"></a>在Github上创建仓库</h5><p>接下来，我们要为博客<strong>申请空间（即，在Github上创建一个仓库）</strong>。这个仓库与一般我们存放项目的仓库没有区别，只不过需要一个特定的命名，创建过程如下：<br><strong>Repository name有固定格式：username.gituhub.io，username既是你的Github用户名，github.io固定不变</strong></p>
+<h4 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h4><p>Hexo 是一个快速、简洁且高效的博客框架。Hexo 使用 Markdown（或其他渲染引擎）解析文章，在几秒内，即可利用靓丽的主题生成静态网页。</p>
+<ul>
+<li>超快速度</li>
+<li>支持 Markdown</li>
+<li>一键部署</li>
+<li>丰富的插件  </li>
+</ul>
+<p>安装Hexo的过程十分简单，但在安装时电脑上必须已经安装如下应用程序：</p>
+<ul>
+<li>Git</li>
+<li>Node.js</li>
+</ul>
+<h5 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h5><p>通过Git我们可以将本地的Hexo发布到Github上<br>Git下载地址：<a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com/downloads</a><br><strong>（如果电脑上已经安装呢了Github for Windows就无需再安装Git）</strong></p>
+<h6 id="创建用于发布到Github的SSH-key"><a href="#创建用于发布到Github的SSH-key" class="headerlink" title="创建用于发布到Github的SSH key"></a>创建用于发布到Github的SSH key</h6><p>如果我们要将本地的项目通过Git发布到Github上我们需要生成一个SSH key并在Github上登记（安装Github for Windows时同时会在用户目录下创建一个<strong>.ssh</strong>文件夹，无需再创建SSH key）</p>
+<pre><code>使用Git生成SSH key：
+打开Git Bash
+$ cd ~/.ssh   
+</code></pre><p>检测是否存在.ssh文件夹，如不存在将提示：No such file or directory创建SSH key</p>
+<pre><code>$ ssh-keygen -t rsa -C &quot;User@youremail.com&quot;   
+</code></pre><p>**注意格式：ssh-keygen，-C为大写<br>在上述指令后回车三次，分别出现下面三行指令:</p>
+<pre><code>Enter file in which to save the key (/d/Users/whguardian/.ssh/id_rsa): 
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+</code></pre><p>依次为生成的SSH key的 文件名（无需记录，随意），密码，确认密码，三个都可以不填</p>
+<p>在Github上记录SSH key：<br>验证记录正确，打开Git Shell输入（一字不改）：</p>
+<pre><code>ssh -T git@github.com
+</code></pre><h5 id="Node-js"><a href="#Node-js" class="headerlink" title="Node.js"></a>Node.js</h5><p>Hexo依赖于Node.js生成静态网站<br>Node.js下载地址：上方Node.js官网主页</p>
+<h5 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h5><pre><code>$ npm install -g hexo-cli
+</code></pre><h5 id="建站"><a href="#建站" class="headerlink" title="建站"></a>建站</h5><p>主要命令：</p>
+<pre><code>$ hexo init &lt;folder&gt;
+$ cd &lt;folder&gt;
+$ npm install
+</code></pre><p>通过hexo init在指定位置创建博客文件夹：<br>使用Git Shell到指定盘符或文件夹下创建文件夹（以E: 为例创建一个Blog文件夹）：</p>
+<pre><code>F:\&gt; e:
+E:\&gt; hexo init Blog
+</code></pre><p><strong>也可以直接在指定盘符或文件夹直接右键Git Bash后hexo init Blog</strong><br>进入创建的文件夹：<strong>cd Blog</strong> （如果文件夹有多个单词将命名一引号框起来）<br>安装Hexo在文件夹下： <strong>npm install</strong><br>新建完成文件夹下目录：</p>
+<pre><code>.
+|── _config.yml
+|── package.json
+|── scaffolds
+|── source 
+|       |── _drafts
+|       |── _posts
+|── themes
+</code></pre><h5 id="第一次部署（本地部署，未上传到Github）"><a href="#第一次部署（本地部署，未上传到Github）" class="headerlink" title="第一次部署（本地部署，未上传到Github）"></a><strong>第一次部署（本地部署，未上传到Github）</strong></h5><pre><code>$ hexo generate
+$ hexo server
+</code></pre><h5 id="预览"><a href="#预览" class="headerlink" title="预览"></a>预览</h5><p>在浏览器中输入：<strong>localhost:4000</strong> 预览，在shell中按<strong>Ctrl + C</strong>停止server</p>
+<h5 id="发布到Github"><a href="#发布到Github" class="headerlink" title="发布到Github"></a>发布到Github</h5><p>修改Blog文件下的<strong>_config.yml</strong>，这是hexo博客的配置文件。修改deploy标签下信息（deploy在文件末尾）</p>
+<pre><code>deploy: 
+  type: git
+  repo: https://github.com/whguardian/whguardian.github.io.git,master
+</code></pre><p><strong>type: repo: 后跟一个space，格式不能有任何更改</strong><br>发布到Github</p>
+<pre><code>hexo deploy
+</code></pre><p>每次发布到Github时，都需要执行</p>
+<pre><code>hexo generate
+hexo deploy
+</code></pre><p><strong>偷工减料：generate可以写为g，deploy可以写为d，并且两个可以互相为参数，如下：</strong></p>
+<pre><code>hexo generate -d
+hexo deploy -g
+</code></pre><hr>
+<h3 id="主题-与-评论，分享"><a href="#主题-与-评论，分享" class="headerlink" title="主题 与 评论，分享"></a>主题 与 评论，分享</h3><h4 id="NexT主题"><a href="#NexT主题" class="headerlink" title="NexT主题"></a>NexT主题</h4><p>Hexo有许多的主题主题以使用户能够定制自己的个性博客（其实是我不喜欢默认的主题，要不然谁愿意做麻烦事，┻━┻︵╰(‵□′)╯︵┻━┻ ）。这里我选择的是NexT，（随大流，随大流）。</p>
+<h5 id="下载主题并启用"><a href="#下载主题并启用" class="headerlink" title="下载主题并启用"></a>下载主题并启用</h5><p>在使用主题前，我们需要将主题先克隆到我们的Hexo上。</p>
+<pre><code>cd Blog
+git clone https://github.com/iissnan/hexo-theme-next themes/next
+</code></pre><p>当然，也可以从相关网站下载主题：<a href="https://github.com/iissnan/hexo-theme-next/releases" target="_blank" rel="noopener">https://github.com/iissnan/hexo-theme-next/releases</a><br><strong>注意：</strong>在clone完成后，我们在Blog文件下将有两个_config.yml。一个是Hexo的，一个是在Blog/themes/your theme下的_config.yml。NexT将前一个称之为<strong>站点配置文件</strong>，在theme下的为<strong>主题配置文件</strong>。<br>完成clone后，修改_config.yml下theme</p>
+<pre><code>theme: next
+</code></pre><p>不要问我大小写，我也没有试过，但是！！！theme: 后一定要跟一个space，一定要跟一个 space，一定要跟一个space。</p>
+<h5 id="主题设定"><a href="#主题设定" class="headerlink" title="主题设定"></a>主题设定</h5><p>NexT同时还为我们三个不同的外观，通过更改<strong>主题配置文件</strong>中的scheme的值来更改主题</p>
+<pre><code># Schemes
+#scheme: Muse
+scheme: Mist
+#scheme: Pisces
+</code></pre><ul>
+<li>Muse - 默认 Scheme，这是 NexT 最初的版本，黑白主调，大量留白</li>
+<li>Mist - Muse 的紧凑版本，整洁有序的单栏外观</li>
+<li>Pisces - 双栏 Scheme，小家碧玉似的清新</li>
+</ul>
+<p>通过去除scheme前#来设定这个外观，如果没有scheme则自己手动输入，记住<strong>不要漏scheme: 后的space</strong>。</p>
+<h4 id="NexT主题配置"><a href="#NexT主题配置" class="headerlink" title="NexT主题配置"></a>NexT主题配置</h4><p>通过修改 <strong>站点配置文件</strong> 或 <strong>主题配置文件</strong> 来修改NexT。</p>
+<h5 id="界面语言：站点配置文件"><a href="#界面语言：站点配置文件" class="headerlink" title="界面语言：站点配置文件"></a>界面语言：站点配置文件</h5><pre><code>language: zh-Hans    //简体中文
+</code></pre><p>NexT支持的语言</p>
+<table>
+<thead>
+<tr>
+<th>语言</th>
+<th>代码</th>
+<th>设定示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>English</td>
+<td>en</td>
+<td>language: en</td>
+</tr>
+<tr>
+<td>简体中文</td>
+<td>zh-Hans</td>
+<td>language: zh-Hans</td>
+</tr>
+<tr>
+<td>Français</td>
+<td>fr-FR</td>
+<td>language: fr-FR</td>
+</tr>
+<tr>
+<td>Português</td>
+<td>pt</td>
+<td>language: pt</td>
+</tr>
+<tr>
+<td>繁體中文</td>
+<td>zh-hk 或者 zh-tw</td>
+<td>language: zh-hk</td>
+</tr>
+<tr>
+<td>Русский язык</td>
+<td>ru</td>
+<td>language: ru</td>
+</tr>
+<tr>
+<td>Deutsch</td>
+<td>de</td>
+<td>language: de</td>
+</tr>
+<tr>
+<td>日本語</td>
+<td>ja</td>
+<td>language: ja</td>
+</tr>
+<tr>
+<td>Indonesian</td>
+<td>id</td>
+<td>language: id</td>
+</tr>
+</tbody>
+</table>
+<h5 id="菜单：主题配置文件"><a href="#菜单：主题配置文件" class="headerlink" title="菜单：主题配置文件"></a>菜单：主题配置文件</h5><h5 id="社交链接：主题配置文件"><a href="#社交链接：主题配置文件" class="headerlink" title="社交链接：主题配置文件"></a>社交链接：主题配置文件</h5><p>将自己的微博，Twitter分享给全世界的人。链接被防止在<strong>主题配置文件</strong>的social字段中，其键值格式是 显示文本: 链接地址。</p>
+<pre><code>social:
+  Github: https://github.com/username
+  Twitter: https://twitter.com/username
+  Weibo: http://weibo.com/username
+</code></pre><p>为上面的社交链接设置图标，社交图标来自<a href="http://fontawesome.io/" target="_blank" rel="noopener">Font Awesome</a></p>
+<pre><code>social_icons:
+  enable: true
+  # Icon Mappings.
+  # KeyMapsToSocalItemKey: NameOfTheIconFromFontAwesome
+  GitHub: github
+  Twitter: twitter
+  Weibo: weibo
+</code></pre><h4 id="Disqus评论系统"><a href="#Disqus评论系统" class="headerlink" title="Disqus评论系统"></a>Disqus评论系统</h4><p>这是我最开心的部分，:D，Disqus评论系统。至于为什么开心，原因很简单，这玩意基本改一行就ok啦！！！Tell me，你有什么理由不选它……<br>当然，要用它基本的注册还是需要的。</p>
+<h5 id="Disque注册与短域名"><a href="#Disque注册与短域名" class="headerlink" title="Disque注册与短域名"></a>Disque注册与短域名</h5><h5 id="Disqus配置"><a href="#Disqus配置" class="headerlink" title="Disqus配置"></a>Disqus配置</h5><p>修改<strong>主题配置文件</strong>添加社会化评论系统到博客中：</p>
+<pre><code>#Disqus
+disqusshortname: your shortname //不需要再强调space了吧
+</code></pre><h4 id="分享"><a href="#分享" class="headerlink" title="分享"></a>分享</h4><p>通过<strong>社交分享插件</strong>来实现分享功能。网上有许多分享插件，<strong>AddThis</strong>，<strong>*多说分享</strong>，<strong>JiaThis</strong>，<strong>百度分享</strong>……我选择的是AddThis作为博客的第三方分享。AdThis是国外的第三方分享，之所以选择它是因为它将几乎所有的社交书签的网站集合在一起，我们几乎能分享到任何一个SNS。</p>
+<p>AddThis：<a href="http://www.addthis.com/" target="_blank" rel="noopener">http://www.addthis.com/</a></p>
+<p>前提：修改<strong>站点配置文件</strong>下<strong>url</strong>节点，</p>
+<pre><code>url: http://yoursite.github.io
+</code></pre><h5 id="AddThis"><a href="#AddThis" class="headerlink" title="AddThis"></a>AddThis</h5><p>注册AddThis，注册一个分享按钮：</p>
+<pre><code>1. Add Profile：添加一个新的Profile
+2. 点击Tools：选择Tools下一个选项 SET UP
+3. Activate：自定义设置分享按钮，完成后Activate
+4. Continue：直接点击CONTINUE（不需要复制JS，NexT中内置）
+5. 点击 ···：复制General的ID
+</code></pre><h5 id="添加分享服务"><a href="#添加分享服务" class="headerlink" title="添加分享服务"></a>添加分享服务</h5><p><strong>主题配置文件</strong>，_config.yml下解除<strong>add_this_id</strong>注释，去除“ # ”，在后面添加AddThis ID。</p>
+<hr>
+<h3 id="博客文章创建与发布"><a href="#博客文章创建与发布" class="headerlink" title="博客文章创建与发布"></a>博客文章创建与发布</h3><h4 id="创建博客"><a href="#创建博客" class="headerlink" title="创建博客"></a>创建博客</h4><pre><code>$ hexo new &quot;your Blog name&quot;
+</code></pre><h4 id="博客编辑"><a href="#博客编辑" class="headerlink" title="博客编辑"></a>博客编辑</h4><p>博客创建完成后，将在 ?:\Blog\source_posts中创建一个以“ your Blog name”命名的.md文件，通过编辑.md文件我们就可以完成博客的编辑。<br>如何打开.md文件，童鞋们可能想到了万能的<strong>记事本</strong>，但是，直接用记事本编辑的.md文件很容易出现乱码，所以，放弃这个念头吧。</p>
+<pre><code>我使用的md编辑器：StackEdit
+StackEdit是一个在线的md编辑器，当然，它是免费（不然为什么选它呢！！！）
+</code></pre><p>StackEdit编辑器网址:<a href="https://stackedit.io/editor#" target="_blank" rel="noopener">https://stackedit.io/editor#</a><br>md文件由Markdown这种标记言语编写，关于Markdown的语法，下面有一个我自己写的示例链接：<br><a href="https://github.com/whguardian/README-MD" target="_blank" rel="noopener">https://github.com/whguardian/README-MD</a><br>如果想要深入了解Markdown大家可以自行Google，百度。</p>
+<h5 id="Front-matter"><a href="#Front-matter" class="headerlink" title="Front-matter"></a>Front-matter</h5><p>在生成博客md文件时，博客中已经包含了一些内容，这些内容既是<strong>Front-matter</strong>，通过 “ <strong>- - -</strong> ”被分隔在文件头部。如下：</p>
+<hr>
+<p>---<br>title: 我创建博客的“传奇历程”<br>date: 2016-07-16 14:10:00<br>categories:<br> - Blog<br> - 博客<br> - Github<br>tags:<br> - Hexo<br> - Git<br> - NexT<br> - Disqus<br> - Github<br>---</p>
+<hr>
+<p>Front-matter中声明了如<strong>文章标题</strong>，<strong>创建时间</strong>，<strong>类别</strong>，<strong>标签</strong>，<strong>评论功能</strong>等描述博客的参数。关于这部分的内容可以查看hexo的官方文档：<a href="https://hexo.io/zh-cn/docs/front-matter.html" target="_blank" rel="noopener">https://hexo.io/zh-cn/docs/front-matter.html</a>。</p>
+<h4 id="发布博客"><a href="#发布博客" class="headerlink" title="发布博客"></a>发布博客</h4><p>见 <strong>发布到Github</strong></p>
+<hr>
+<h3 id="域名绑定"><a href="#域名绑定" class="headerlink" title="域名绑定"></a>域名绑定</h3><p>除了使用Github为我们提供的二级域名，我们还可以绑定自己的域名到博客。</p>
+<h4 id="域名解析"><a href="#域名解析" class="headerlink" title="域名解析"></a>域名解析</h4><p>个人在 <strong>GoDaddy</strong> 与 <strong>万网</strong> 注册过域名，现在使用的是GoDaddy。注册GoDaddy和域名申请我就不介绍了。这里我们想要一个二级域名来指向博客，需要域名解析。</p>
+<p>GoDaddy：<a href="https://sg.godaddy.com" target="_blank" rel="noopener">https://sg.godaddy.com</a></p>
+<p>域名解析：</p>
+<pre><code>右上角 用户名 --&gt; 管理域名 --&gt;（切换到列表视图）--&gt; 点击使用的域名 --&gt; DNS区域文件
+</code></pre><p>修改CName标签下内容，添加编辑 <strong>主机：（用户自定义）</strong>，<strong>指向：yoursite.github.io</strong>。修改完成后DNS服务器需要时间进行解析。</p>
+<h4 id="博客识别域名"><a href="#博客识别域名" class="headerlink" title="博客识别域名"></a>博客识别域名</h4><p>在Blog\source下创建<strong>CNAME</strong>（没有后缀名）文件，添加域名到CNAME。</p>
+<pre><code>添加域名实例：blog.whguardian.info
+</code></pre><p>部署到github。</p>
+<p>注：<strong>不建议在国内注册和只用CN域名，其他也不多说，只是你并不能获取CN的完全所有权，并且存在被 域名暂停解析 的风险，也就是说你将无法使用你的CN域名，CN域名将被禁止访问，WTF。</strong> </p>
+<hr>
+<h3 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h3><p>以上就是有关于 <strong>Github + Hexo 个人博客</strong>的搭建，发布内容，也是对我创建自己的个人博客的一个总结。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Github/" rel="tag"># Github</a>
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+            <a href="/tags/Disqus/" rel="tag"># Disqus</a>
+          
+            <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+          
+            <a href="/tags/NexT/" rel="tag"># NexT</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/17/Translate-Git-Cheat-Sheet/" rel="prev" title="简翻 Github - GIT CHEAT SHEET">
+                简翻 Github - GIT CHEAT SHEET <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">whguardian</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/whguardian" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://twitter.com/whguardian" target="_blank" title="Twitter">
+                      
+                        <i class="fa fa-fw fa-twitter"></i>Twitter</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/3938192975" target="_blank" title="Weibo">
+                      
+                        <i class="fa fa-fw fa-weibo"></i>Weibo</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Github-Hexo创建博客"><span class="nav-number">1.</span> <span class="nav-text">Github + Hexo创建博客</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Github"><span class="nav-number">1.1.</span> <span class="nav-text">Github</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#注册Github"><span class="nav-number">1.1.1.</span> <span class="nav-text">注册Github</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#在Github上创建仓库"><span class="nav-number">1.1.2.</span> <span class="nav-text">在Github上创建仓库</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hexo"><span class="nav-number">1.2.</span> <span class="nav-text">Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Git"><span class="nav-number">1.2.1.</span> <span class="nav-text">Git</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#创建用于发布到Github的SSH-key"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">创建用于发布到Github的SSH key</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Node-js"><span class="nav-number">1.2.2.</span> <span class="nav-text">Node.js</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装Hexo"><span class="nav-number">1.2.3.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#建站"><span class="nav-number">1.2.4.</span> <span class="nav-text">建站</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#第一次部署（本地部署，未上传到Github）"><span class="nav-number">1.2.5.</span> <span class="nav-text">第一次部署（本地部署，未上传到Github）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#预览"><span class="nav-number">1.2.6.</span> <span class="nav-text">预览</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#发布到Github"><span class="nav-number">1.2.7.</span> <span class="nav-text">发布到Github</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主题-与-评论，分享"><span class="nav-number">2.</span> <span class="nav-text">主题 与 评论，分享</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#NexT主题"><span class="nav-number">2.1.</span> <span class="nav-text">NexT主题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#下载主题并启用"><span class="nav-number">2.1.1.</span> <span class="nav-text">下载主题并启用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#主题设定"><span class="nav-number">2.1.2.</span> <span class="nav-text">主题设定</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NexT主题配置"><span class="nav-number">2.2.</span> <span class="nav-text">NexT主题配置</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#界面语言：站点配置文件"><span class="nav-number">2.2.1.</span> <span class="nav-text">界面语言：站点配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#菜单：主题配置文件"><span class="nav-number">2.2.2.</span> <span class="nav-text">菜单：主题配置文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#社交链接：主题配置文件"><span class="nav-number">2.2.3.</span> <span class="nav-text">社交链接：主题配置文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Disqus评论系统"><span class="nav-number">2.3.</span> <span class="nav-text">Disqus评论系统</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Disque注册与短域名"><span class="nav-number">2.3.1.</span> <span class="nav-text">Disque注册与短域名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Disqus配置"><span class="nav-number">2.3.2.</span> <span class="nav-text">Disqus配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#分享"><span class="nav-number">2.4.</span> <span class="nav-text">分享</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#AddThis"><span class="nav-number">2.4.1.</span> <span class="nav-text">AddThis</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#添加分享服务"><span class="nav-number">2.4.2.</span> <span class="nav-text">添加分享服务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#博客文章创建与发布"><span class="nav-number">3.</span> <span class="nav-text">博客文章创建与发布</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#创建博客"><span class="nav-number">3.1.</span> <span class="nav-text">创建博客</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#博客编辑"><span class="nav-number">3.2.</span> <span class="nav-text">博客编辑</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Front-matter"><span class="nav-number">3.2.1.</span> <span class="nav-text">Front-matter</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发布博客"><span class="nav-number">3.3.</span> <span class="nav-text">发布博客</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#域名绑定"><span class="nav-number">4.</span> <span class="nav-text">域名绑定</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#域名解析"><span class="nav-number">4.1.</span> <span class="nav-text">域名解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#博客识别域名"><span class="nav-number">4.2.</span> <span class="nav-text">博客识别域名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#完成"><span class="nav-number">5.</span> <span class="nav-text">完成</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">whguardian</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+    
+      <script id="dsq-count-scr" src="https://whguardian.disqus.com/count.js" async></script>
+    
+
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://yoursite.com/2016/07/16/set-up-a-personal-blog/';
+          this.page.identifier = '2016/07/16/set-up-a-personal-blog/';
+          this.page.title = '个人博客搭建记录 —— Github + Hexo';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://whguardian.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
+    
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
