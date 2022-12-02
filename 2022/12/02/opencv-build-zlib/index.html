@@ -20,20 +20,19 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="tailwindcss通过扫描你的网页文件，javascript组件和其他模版中的class名，生成样式  tailwindcss官网 - tailwindcss.com">
+  <meta name="description" content="OpenCV - Build_ZLIB在编译OpenCV需要链接到第三方库，OpenCV已经为我们准备并放置在3rdparty下。 这里比较特殊的是BUILD_ZLIB，在Windows下，如何设置BUILD_ZLIB为false，在编译时，依然会编译并使用3rdparty下的zlib，发生这种现象的原因是下面的一段cmake，位于cmake&#x2F;OpenCvFindLibsGrfmt.cmake中。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tailwindcss">
-<meta property="og:url" content="http://example.com/2022/03/15/tailwindcss/index.html">
+<meta property="og:title" content="opencv-build-zlib">
+<meta property="og:url" content="http://example.com/2022/12/02/opencv-build-zlib/index.html">
 <meta property="og:site_name" content="WHGUARDIAN&#39;s Time Space">
-<meta property="og:description" content="tailwindcss通过扫描你的网页文件，javascript组件和其他模版中的class名，生成样式  tailwindcss官网 - tailwindcss.com">
+<meta property="og:description" content="OpenCV - Build_ZLIB在编译OpenCV需要链接到第三方库，OpenCV已经为我们准备并放置在3rdparty下。 这里比较特殊的是BUILD_ZLIB，在Windows下，如何设置BUILD_ZLIB为false，在编译时，依然会编译并使用3rdparty下的zlib，发生这种现象的原因是下面的一段cmake，位于cmake&#x2F;OpenCvFindLibsGrfmt.cmake中。">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-03-15T15:23:09.000Z">
-<meta property="article:modified_time" content="2022-03-15T15:36:27.352Z">
+<meta property="article:published_time" content="2022-12-02T02:46:55.000Z">
+<meta property="article:modified_time" content="2022-12-02T03:10:58.874Z">
 <meta property="article:author" content="Hao Wang">
-<meta property="article:tag" content="tailwindcss">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2022/03/15/tailwindcss/">
+<link rel="canonical" href="http://example.com/2022/12/02/opencv-build-zlib/">
 
 
 <script id="page-configurations">
@@ -46,7 +45,7 @@
   };
 </script>
 
-  <title>tailwindcss | WHGUARDIAN's Time Space</title>
+  <title>opencv-build-zlib | WHGUARDIAN's Time Space</title>
   
 
 
@@ -151,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/15/tailwindcss/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/02/opencv-build-zlib/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -164,7 +163,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          tailwindcss
+          opencv-build-zlib
         </h1>
 
         <div class="post-meta">
@@ -175,16 +174,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-03-15 23:23:09 / Modified: 23:36:27" itemprop="dateCreated datePublished" datetime="2022-03-15T23:23:09+08:00">2022-03-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span></a>
-                </span>
+              <time title="Created: 2022-12-02 10:46:55 / Modified: 11:10:58" itemprop="dateCreated datePublished" datetime="2022-12-02T10:46:55+08:00">2022-12-02</time>
             </span>
 
           
@@ -198,10 +188,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>tailwindcss通过扫描你的网页文件，javascript组件和其他模版中的class名，生成样式</p>
-<ul>
-<li>tailwindcss官网 - <a href="tailwindcss.com">tailwindcss.com</a></li>
-</ul>
+        <h1 id="OpenCV-Build-ZLIB"><a href="#OpenCV-Build-ZLIB" class="headerlink" title="OpenCV - Build_ZLIB"></a>OpenCV - Build_ZLIB</h1><p>在编译OpenCV需要链接到第三方库，OpenCV已经为我们准备并放置在3rdparty下。</p>
+<p>这里比较特殊的是<code>BUILD_ZLIB</code>，在Windows下，如何设置BUILD_ZLIB为false，在编译时，依然<br>会编译并使用3rdparty下的zlib，发生这种现象的原因是下面的一段cmake，<br>位于<code>cmake/OpenCvFindLibsGrfmt.cmake</code>中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># --- zlib (required) ---</span><br><span class="line">if(BUILD_ZLIB)</span><br><span class="line">  ocv_clear_vars(ZLIB_FOUND)</span><br><span class="line">else()</span><br><span class="line">  ocv_clear_internal_cache_vars(ZLIB_LIBRARY ZLIB_INCLUDE_DIR)</span><br><span class="line">  if(ANDROID)</span><br><span class="line">    set(_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES $&#123;CMAKE_FIND_LIBRARY_SUFFIXES&#125;)</span><br><span class="line">    set(CMAKE_FIND_LIBRARY_SUFFIXES .so)</span><br><span class="line">  endif()</span><br><span class="line">  find_package(ZLIB &quot;$&#123;MIN_VER_ZLIB&#125;&quot;)</span><br><span class="line">  if(ANDROID)</span><br><span class="line">    set(CMAKE_FIND_LIBRARY_SUFFIXES $&#123;_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES&#125;)</span><br><span class="line">    unset(_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES)</span><br><span class="line">  endif()</span><br><span class="line">  if(ZLIB_FOUND AND ANDROID)</span><br><span class="line">    if(ZLIB_LIBRARIES MATCHES &quot;/usr/lib.*/libz.so$&quot;)</span><br><span class="line">      set(ZLIB_LIBRARIES z)</span><br><span class="line">    endif()</span><br><span class="line">  endif()</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">if(NOT ZLIB_FOUND)</span><br><span class="line">  ocv_clear_vars(ZLIB_LIBRARY ZLIB_LIBRARIES ZLIB_INCLUDE_DIR)</span><br><span class="line"></span><br><span class="line">  set(ZLIB_LIBRARY zlib CACHE INTERNAL &quot;&quot;)</span><br><span class="line">  add_subdirectory(&quot;$&#123;OpenCV_SOURCE_DIR&#125;/3rdparty/zlib&quot;)</span><br><span class="line">  set(ZLIB_INCLUDE_DIR &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_SOURCE_DIR&#125;&quot; &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_BINARY_DIR&#125;&quot; CACHE INTERNAL &quot;&quot;)</span><br><span class="line">  set(ZLIB_INCLUDE_DIRS $&#123;ZLIB_INCLUDE_DIR&#125;)</span><br><span class="line">  set(ZLIB_LIBRARIES $&#123;ZLIB_LIBRARY&#125;)</span><br><span class="line"></span><br><span class="line">  ocv_parse_header2(ZLIB &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_SOURCE_DIR&#125;/zlib.h&quot; ZLIB_VERSION)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
+<p>从上面的cmake片段我们可以知道，zlib在OpenCV的编译中是必须的，默认，BUILD_ZLIB设置<br>为true，这时，ZLIB_FOUND会被清理，总是会进入第二个<code>if(NOT ZLIB_FOUND)</code>，<code> add_subdirectory(&quot;$&#123;OpenCV_SOURCE_DIR&#125;/3rdparty/zlib&quot;)</code>。如果将BUILD_ZLIB<br>设置为false，则会先进入第一个if(BUILD_ZLIB)的else中，尝试通过<code>find_package(ZLIB &quot;$&#123;MIN_VER_ZLIB&#125;&quot;)</code><br>查找系统中的zlib（这也是为什么在MacOS中设置BUILD_ZLIB&#x3D;false会起作用，因为zlib已经<br>成为MacOS的一部分）</p>
 
     </div>
 
@@ -210,9 +200,6 @@
     
 
       <footer class="post-footer">
-          <div class="post-tags">
-              <a href="/tags/tailwindcss/" rel="tag"># tailwindcss</a>
-          </div>
 
         
 
@@ -220,13 +207,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/03/15/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2022/12/01/cmake-note/" rel="prev" title="cmake-note">
+      <i class="fa fa-chevron-left"></i> cmake-note
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/03/16/node/" rel="next" title="node">
-      node <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -285,6 +269,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#OpenCV-Build-ZLIB"><span class="nav-number">1.</span> <span class="nav-text">OpenCV - Build_ZLIB</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -298,16 +283,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
-      <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
-      </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">1</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>

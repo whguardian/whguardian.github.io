@@ -145,6 +145,148 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/02/opencv-build-zlib/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/12/02/opencv-build-zlib/" class="post-title-link" itemprop="url">opencv-build-zlib</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-12-02 10:46:55 / Modified: 11:10:58" itemprop="dateCreated datePublished" datetime="2022-12-02T10:46:55+08:00">2022-12-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="OpenCV-Build-ZLIB"><a href="#OpenCV-Build-ZLIB" class="headerlink" title="OpenCV - Build_ZLIB"></a>OpenCV - Build_ZLIB</h1><p>在编译OpenCV需要链接到第三方库，OpenCV已经为我们准备并放置在3rdparty下。</p>
+<p>这里比较特殊的是<code>BUILD_ZLIB</code>，在Windows下，如何设置BUILD_ZLIB为false，在编译时，依然<br>会编译并使用3rdparty下的zlib，发生这种现象的原因是下面的一段cmake，<br>位于<code>cmake/OpenCvFindLibsGrfmt.cmake</code>中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># --- zlib (required) ---</span><br><span class="line">if(BUILD_ZLIB)</span><br><span class="line">  ocv_clear_vars(ZLIB_FOUND)</span><br><span class="line">else()</span><br><span class="line">  ocv_clear_internal_cache_vars(ZLIB_LIBRARY ZLIB_INCLUDE_DIR)</span><br><span class="line">  if(ANDROID)</span><br><span class="line">    set(_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES $&#123;CMAKE_FIND_LIBRARY_SUFFIXES&#125;)</span><br><span class="line">    set(CMAKE_FIND_LIBRARY_SUFFIXES .so)</span><br><span class="line">  endif()</span><br><span class="line">  find_package(ZLIB &quot;$&#123;MIN_VER_ZLIB&#125;&quot;)</span><br><span class="line">  if(ANDROID)</span><br><span class="line">    set(CMAKE_FIND_LIBRARY_SUFFIXES $&#123;_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES&#125;)</span><br><span class="line">    unset(_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES)</span><br><span class="line">  endif()</span><br><span class="line">  if(ZLIB_FOUND AND ANDROID)</span><br><span class="line">    if(ZLIB_LIBRARIES MATCHES &quot;/usr/lib.*/libz.so$&quot;)</span><br><span class="line">      set(ZLIB_LIBRARIES z)</span><br><span class="line">    endif()</span><br><span class="line">  endif()</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">if(NOT ZLIB_FOUND)</span><br><span class="line">  ocv_clear_vars(ZLIB_LIBRARY ZLIB_LIBRARIES ZLIB_INCLUDE_DIR)</span><br><span class="line"></span><br><span class="line">  set(ZLIB_LIBRARY zlib CACHE INTERNAL &quot;&quot;)</span><br><span class="line">  add_subdirectory(&quot;$&#123;OpenCV_SOURCE_DIR&#125;/3rdparty/zlib&quot;)</span><br><span class="line">  set(ZLIB_INCLUDE_DIR &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_SOURCE_DIR&#125;&quot; &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_BINARY_DIR&#125;&quot; CACHE INTERNAL &quot;&quot;)</span><br><span class="line">  set(ZLIB_INCLUDE_DIRS $&#123;ZLIB_INCLUDE_DIR&#125;)</span><br><span class="line">  set(ZLIB_LIBRARIES $&#123;ZLIB_LIBRARY&#125;)</span><br><span class="line"></span><br><span class="line">  ocv_parse_header2(ZLIB &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_SOURCE_DIR&#125;/zlib.h&quot; ZLIB_VERSION)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
+<p>从上面的cmake片段我们可以知道，zlib在OpenCV的编译中是必须的，默认，BUILD_ZLIB设置<br>为true，这时，ZLIB_FOUND会被清理，总是会进入第二个<code>if(NOT ZLIB_FOUND)</code>，<code> add_subdirectory(&quot;$&#123;OpenCV_SOURCE_DIR&#125;/3rdparty/zlib&quot;)</code>。如果将BUILD_ZLIB<br>设置为false，则会先进入第一个if(BUILD_ZLIB)的else中，尝试通过<code>find_package(ZLIB &quot;$&#123;MIN_VER_ZLIB&#125;&quot;)</code><br>查找系统中的zlib（这也是为什么在MacOS中设置BUILD_ZLIB&#x3D;false会起作用，因为zlib已经<br>成为MacOS的一部分）</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/01/cmake-note/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2022/12/01/cmake-note/" class="post-title-link" itemprop="url">cmake-note</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-12-01 08:10:20" itemprop="dateCreated datePublished" datetime="2022-12-01T08:10:20+08:00">2022-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-02 08:29:15" itemprop="dateModified" datetime="2022-12-02T08:29:15+08:00">2022-12-02</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="CMake-Note"><a href="#CMake-Note" class="headerlink" title="CMake Note"></a>CMake Note</h1><h2 id="FUNCTION-vs-MACRO"><a href="#FUNCTION-vs-MACRO" class="headerlink" title="FUNCTION vs MACRO"></a>FUNCTION vs MACRO</h2><h3 id="ARGC-ARGV-ARGN"><a href="#ARGC-ARGV-ARGN" class="headerlink" title="ARGC ARGV ARGN"></a>ARGC ARGV ARGN</h3><ul>
+<li>ARGC</li>
+<li>ARGV</li>
+<li>ARGN</li>
+</ul>
+<h2 id="include"><a href="#include" class="headerlink" title="include"></a>include</h2><h2 id="add-subdirectory"><a href="#add-subdirectory" class="headerlink" title="add_subdirectory"></a>add_subdirectory</h2><p>创建新的工作域，并继承调用add_subdirectory的工作域。</p>
+<h2 id="在Apple下链接framework"><a href="#在Apple下链接framework" class="headerlink" title="在Apple下链接framework"></a>在Apple下链接framework</h2><blockquote>
+<p>target_link_libraries(lib_name “-framework <framework_name>“”)</p>
+</blockquote>
+<p>在Apple下<code>c++ -framework framework_name</code></p>
+<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><blockquote>
+<p>if(APPLE)<br>  target_link_libraries(lib_name “-framework CoreFoundation””)<br>endif</p>
+</blockquote>
+<h2 id="CMAKE-PREFIX-PATH"><a href="#CMAKE-PREFIX-PATH" class="headerlink" title="CMAKE_PREFIX_PATH"></a>CMAKE_PREFIX_PATH</h2><h3 id="find-package"><a href="#find-package" class="headerlink" title="find_package"></a>find_package</h3><ul>
+<li>模块<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/module/FindPackageHandleStandardArgs.html">FindPackageHandleStandardArgs</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="http://example.com/2022/04/26/nginx-config-directory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -168,10 +310,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2022-04-26 23:36:36 / Modified: 23:38:51" itemprop="dateCreated datePublished" datetime="2022-04-26T23:36:36+08:00">2022-04-26</time>
+              <time title="Created: 2022-04-26 23:36:36" itemprop="dateCreated datePublished" datetime="2022-04-26T23:36:36+08:00">2022-04-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2022-12-02 11:10:16" itemprop="dateModified" datetime="2022-12-02T11:10:16+08:00">2022-12-02</time>
+              </span>
 
           
 
@@ -191,7 +339,7 @@
 <p>首先，这篇文章是为了解决一个对初次接触nginx的运维人员常会出现的不太好的习惯：<br>总是将配置文件写入<code>nginx.conf</code>中。</p>
 </blockquote>
 <p>首先，为什么新手会将所有配置写入<code>nginx.conf</code>，因为如果没有其他人的引导，在网上搜索资料时，给出的答案基本都会是直接的配置文件修改，但一般不会提到在哪里，为什么修改这个文件。</p>
-<h2 id="sites-available与sites-enabled"><a href="#sites-available与sites-enabled" class="headerlink" title="sites-available与sites-enabled"></a>sites-available与sites-enabled</h2><h3 id="给出使用方法："><a href="#给出使用方法：" class="headerlink" title="给出使用方法："></a>给出使用方法：</h3><blockquote>
+<h2 id="sites-available与sites-enabled-Ubuntu下的nginx默认生成"><a href="#sites-available与sites-enabled-Ubuntu下的nginx默认生成" class="headerlink" title="sites-available与sites-enabled (Ubuntu下的nginx默认生成)"></a>sites-available与sites-enabled (Ubuntu下的nginx默认生成)</h2><h3 id="给出使用方法："><a href="#给出使用方法：" class="headerlink" title="给出使用方法："></a>给出使用方法：</h3><blockquote>
 <p>在sites-available中存放实际的配置文件（不需要.conf后缀），同时将需要激活的配置文件软链接到sites-enabled下。</p>
 </blockquote>
 <h3 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h3><blockquote>
@@ -203,15 +351,11 @@
 <p>include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;*;</p>
 </blockquote>
 <p>将在sites-enabled中所有的配置文件导入，所以，当需要配置站点时，可以在<code>sites-enabled</code>下为每一个站点添加单独的配置文件，但是，不建议直接在<code>sites-enabled</code>下直接创建配置文件，通用方法时，在<code>sites-available</code>创建配置文件（<code>sites-available</code>下的配置文件默认不会被应用），然后，将需要激活的配置软链接到<code>sites-enabled</code>，这样，即增加了配置的灵活性，同时可以保留配置文件。</p>
-<h2 id="snippets-x2F-snakeoil-conf"><a href="#snippets-x2F-snakeoil-conf" class="headerlink" title="snippets&#x2F;snakeoil.conf"></a>snippets&#x2F;snakeoil.conf</h2><p>主要用于证书存放</p>
+<h2 id="snippets-x2F-snakeoil-conf-Ubuntu下的nginx默认生成"><a href="#snippets-x2F-snakeoil-conf-Ubuntu下的nginx默认生成" class="headerlink" title="snippets&#x2F;snakeoil.conf (Ubuntu下的nginx默认生成)"></a>snippets&#x2F;snakeoil.conf (Ubuntu下的nginx默认生成)</h2><p>主要用于证书存放</p>
 <blockquote>
 <p>建议在<code>snippets</code>下创建一个与域名同名的配置文件，如为域名<em>domain.com</em>在<code>snippets</code>创建一个<em>domain.com.conf</em>配置文件用于指向证书与密钥，然后在域名的配置文件下添加配置<code>include snippets/domain.com.conf;</code></p>
 </blockquote>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="常用存放证书的路径"><a href="#常用存放证书的路径" class="headerlink" title="常用存放证书的路径"></a>常用存放证书的路径</h4><ul>
-<li>&#x2F;etc&#x2F;ssl&#x2F;cert - 证书位置，基本上里面都是一个软链接，链接向真正的证书</li>
-<li>&#x2F;etc&#x2F;ssl&#x2F;private - 密钥位置，<strong>注意这个文件夹拥有x权限！</strong></li>
-</ul>
-<h4 id="证书颁发"><a href="#证书颁发" class="headerlink" title="证书颁发"></a>证书颁发</h4><ul>
+<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="证书颁发"><a href="#证书颁发" class="headerlink" title="证书颁发"></a>证书颁发</h4><ul>
 <li><a target="_blank" rel="noopener" href="https://letsencrypt.org/">Let’s Encrypt</a> - 一个免费的证书签发网站</li>
 <li><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh">An ACME Shell script: acme.sh</a> - 用于创建证书的一个脚本工具，<strong>工具不会产生环境污染</strong>。</li>
 </ul>
@@ -274,77 +418,6 @@
 
       
           <h2 id="Babel-兼容性转换"><a href="#Babel-兼容性转换" class="headerlink" title="Babel - 兼容性转换"></a>Babel - 兼容性转换</h2><h2 id="CommonJS-and-ES-module"><a href="#CommonJS-and-ES-module" class="headerlink" title="CommonJS and ES module"></a>CommonJS and ES module</h2><h2 id="V8-Javascirpt-engine"><a href="#V8-Javascirpt-engine" class="headerlink" title="V8 - Javascirpt engine"></a>V8 - Javascirpt engine</h2><p>V8提供一个Javascript运行时环境</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/15/tailwindcss/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHGUARDIAN's Time Space">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/15/tailwindcss/" class="post-title-link" itemprop="url">tailwindcss</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-15 23:23:09 / Modified: 23:36:27" itemprop="dateCreated datePublished" datetime="2022-03-15T23:23:09+08:00">2022-03-15</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/css/" itemprop="url" rel="index"><span itemprop="name">css</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>tailwindcss通过扫描你的网页文件，javascript组件和其他模版中的class名，生成样式</p>
-<ul>
-<li>tailwindcss官网 - <a href="tailwindcss.com">tailwindcss.com</a></li>
-</ul>
 
       
     </div>
@@ -496,16 +569,12 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">5</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
-      <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">categories</span>
-      </div>
       <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">1</span>
         <span class="site-state-item-name">tags</span>
       </div>
   </nav>
