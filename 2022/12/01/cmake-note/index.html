@@ -28,7 +28,7 @@
 <meta property="og:description" content="CMake NoteFUNCTION vs MACROARGC ARGV ARGN ARGC ARGV ARGN  includeadd_subdirectory创建新的工作域，并继承调用add_subdirectory的工作域。 在Apple下链接framework target_link_libraries(lib_name “-framework “”)  在Apple下c++ -frame">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-12-01T00:10:20.000Z">
-<meta property="article:modified_time" content="2022-12-02T00:29:15.460Z">
+<meta property="article:modified_time" content="2022-12-03T08:37:36.040Z">
 <meta property="article:author" content="Hao Wang">
 <meta name="twitter:card" content="summary">
 
@@ -180,7 +180,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-02 08:29:15" itemprop="dateModified" datetime="2022-12-02T08:29:15+08:00">2022-12-02</time>
+                <time title="Modified: 2022-12-03 16:37:36" itemprop="dateModified" datetime="2022-12-03T16:37:36+08:00">2022-12-03</time>
               </span>
 
           
@@ -210,7 +210,7 @@
 <h2 id="CMAKE-PREFIX-PATH"><a href="#CMAKE-PREFIX-PATH" class="headerlink" title="CMAKE_PREFIX_PATH"></a>CMAKE_PREFIX_PATH</h2><h3 id="find-package"><a href="#find-package" class="headerlink" title="find_package"></a>find_package</h3><ul>
 <li>模块<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/module/FindPackageHandleStandardArgs.html">FindPackageHandleStandardArgs</a></li>
 </ul>
-
+<h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><h3 id="FindPackageHandleStandardArgs"><a href="#FindPackageHandleStandardArgs" class="headerlink" title="FindPackageHandleStandardArgs"></a>FindPackageHandleStandardArgs</h3>
     </div>
 
     
@@ -290,7 +290,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CMake-Note"><span class="nav-number">1.</span> <span class="nav-text">CMake Note</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FUNCTION-vs-MACRO"><span class="nav-number">1.1.</span> <span class="nav-text">FUNCTION vs MACRO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARGC-ARGV-ARGN"><span class="nav-number">1.1.1.</span> <span class="nav-text">ARGC ARGV ARGN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-number">1.2.</span> <span class="nav-text">include</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#add-subdirectory"><span class="nav-number">1.3.</span> <span class="nav-text">add_subdirectory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Apple%E4%B8%8B%E9%93%BE%E6%8E%A5framework"><span class="nav-number">1.4.</span> <span class="nav-text">在Apple下链接framework</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMAKE-PREFIX-PATH"><span class="nav-number">1.5.</span> <span class="nav-text">CMAKE_PREFIX_PATH</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#find-package"><span class="nav-number">1.5.1.</span> <span class="nav-text">find_package</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CMake-Note"><span class="nav-number">1.</span> <span class="nav-text">CMake Note</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FUNCTION-vs-MACRO"><span class="nav-number">1.1.</span> <span class="nav-text">FUNCTION vs MACRO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARGC-ARGV-ARGN"><span class="nav-number">1.1.1.</span> <span class="nav-text">ARGC ARGV ARGN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-number">1.2.</span> <span class="nav-text">include</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#add-subdirectory"><span class="nav-number">1.3.</span> <span class="nav-text">add_subdirectory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Apple%E4%B8%8B%E9%93%BE%E6%8E%A5framework"><span class="nav-number">1.4.</span> <span class="nav-text">在Apple下链接framework</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMAKE-PREFIX-PATH"><span class="nav-number">1.5.</span> <span class="nav-text">CMAKE_PREFIX_PATH</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#find-package"><span class="nav-number">1.5.1.</span> <span class="nav-text">find_package</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Modules"><span class="nav-number">1.6.</span> <span class="nav-text">Modules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FindPackageHandleStandardArgs"><span class="nav-number">1.6.1.</span> <span class="nav-text">FindPackageHandleStandardArgs</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -304,7 +304,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
