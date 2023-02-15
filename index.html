@@ -145,6 +145,563 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/15/Spring-Open-Feign/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/15/Spring-Open-Feign/" class="post-title-link" itemprop="url">Spring Open Feign</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-02-15 19:03:42 / Modified: 19:45:29" itemprop="dateCreated datePublished" datetime="2023-02-15T19:03:42+08:00">2023-02-15</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/02/15/Spring-Open-Feign/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/15/Spring-Open-Feign/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这是一篇基于Spring openfeign，关于Spring的一些常用组件，类，编写方式的笔记与源码阅读。</p>
+<p>Spring openfeign封装了openfeign，这里暂时不讨论关于openfeign的详细实现，主要考虑<br>Spring通过什么方法将openfeign注入的。</p>
+<p>Spring使用openfeign通过注解<code>@EnableFeignClients</code>，EnableFeignClients使用Import注解<br>，包含一个<code>ImportBeanDefinitionRegistrar</code>的实现类<code>FeignClientsRegistrar</code>。这里出现了<br>第一个关键接口ImportBeanDefinitionRegistrar，可以使用Import导入配置。<br>我们关注它的实现方法<code>registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry)</code>，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">@Override</span><br><span class="line">public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) &#123;</span><br><span class="line">	registerDefaultConfiguration(metadata, registry);</span><br><span class="line">	// 调用方法</span><br><span class="line">	registerFeignClients(metadata, registry);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public void registerFeignClients(AnnotationMetadata metadata, BeanDefinitionRegistry registry) &#123;</span><br><span class="line">	LinkedHashSet&lt;BeanDefinition&gt; candidateComponents = new LinkedHashSet&lt;&gt;();</span><br><span class="line">	Map&lt;String, Object&gt; attrs = metadata.getAnnotationAttributes(EnableFeignClients.class.getName());</span><br><span class="line">	final Class&lt;?&gt;[] clients = attrs == null ? null : (Class&lt;?&gt;[]) attrs.get(&quot;clients&quot;);</span><br><span class="line">	if (clients == null || clients.length == 0) &#123;</span><br><span class="line">	    ClassPathScanningCandidateComponentProvider scanner = getScanner();</span><br><span class="line">	    scanner.setResourceLoader(this.resourceLoader);</span><br><span class="line">	    scanner.addIncludeFilter(new AnnotationTypeFilter(FeignClient.class));</span><br><span class="line">	    Set&lt;String&gt; basePackages = getBasePackages(metadata);</span><br><span class="line">	    for (String basePackage : basePackages) &#123;</span><br><span class="line">	        candidateComponents.addAll(scanner.findCandidateComponents(basePackage));</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	else &#123;</span><br><span class="line">	    // 这里，通过EnableFeignClients中的clients()方法直接创建了BeanDefinition（BeanDefinition</span><br><span class="line">	    // 是非常重要的关于Bean的一个类，请阅读Spring源码）</span><br><span class="line">	    for (Class&lt;?&gt; clazz : clients) &#123;</span><br><span class="line">	        // AnnotatedGenericBeanDefinition是BeanDefinition的实现类。</span><br><span class="line">	        candidateComponents.add(new AnnotatedGenericBeanDefinition(clazz));</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	for (BeanDefinition candidateComponent : candidateComponents) &#123;</span><br><span class="line">	    if (candidateComponent instanceof AnnotatedBeanDefinition beanDefinition) &#123;</span><br><span class="line">	        // verify annotated class is an interface</span><br><span class="line">	        AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();</span><br><span class="line">	        // 看到这个断言，@FeignClient只能直接接口</span><br><span class="line">	        Assert.isTrue(annotationMetadata.isInterface(), &quot;@FeignClient can only be specified on an interface&quot;);</span><br><span class="line"></span><br><span class="line">	        Map&lt;String, Object&gt; attributes = annotationMetadata</span><br><span class="line">	        		.getAnnotationAttributes(FeignClient.class.getCanonicalName());</span><br><span class="line"></span><br><span class="line">	        String name = getClientName(attributes);</span><br><span class="line">	        String className = annotationMetadata.getClassName();</span><br><span class="line">	        registerClientConfiguration(registry, name, className, attributes.get(&quot;configuration&quot;));</span><br><span class="line"></span><br><span class="line">	        registerFeignClient(registry, annotationMetadata, attributes);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到在<code>registerFeignClients</code>尝试获取<code>EnableFeignClients</code>注解，这里，并没有正式加载Feign client，只是获取一个全局的<br>配置，扫描包路径等，比较特殊的方法是clients()，直接获取关于@FeignClient的类。</p>
+<p>接下来是注册Bean到容器，FeignClientRegister提供了两种注册，分别是<code>eagerlyRegisterFeignClientBeanDefinition(className, attributes, registry)</code><br>和<code>lazilyRegisterFeignClientBeanDefinition(className, attributes, registry)</code>，选择哪一种由<br><em>spring.cloud.openfeign.lazy-attributes-resolution</em>决定，默认为false，使用eagerlyRegisterFeignClientBeanDefinition。<br>这里需要注意一点，不论哪一种方法，其实都是注册了一个<code>FactoryBean</code>的子类，并不是直接注册Feign Client。</p>
+<p>最后，我们发现，Spring的openfeign依然是通过feignClientFactory完成。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/12/SpringApplication%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/12/SpringApplication%E8%A7%A3%E6%9E%90/" class="post-title-link" itemprop="url">SpringApplication解析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-02-12 09:54:33 / Modified: 10:31:05" itemprop="dateCreated datePublished" datetime="2023-02-12T09:54:33+08:00">2023-02-12</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/02/12/SpringApplication%E8%A7%A3%E6%9E%90/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/12/SpringApplication解析/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="成员解析"><a href="#成员解析" class="headerlink" title="成员解析"></a>成员解析</h2><h3 id="primarySources与sources"><a href="#primarySources与sources" class="headerlink" title="primarySources与sources"></a><code>primarySources</code>与<code>sources</code></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class SpringApplication &#123;</span><br><span class="line"></span><br><span class="line">    //...</span><br><span class="line"></span><br><span class="line">	private Set&lt;Class&lt;?&gt;&gt; primarySources;</span><br><span class="line"></span><br><span class="line">	private Set&lt;String&gt; sources = new LinkedHashSet&lt;&gt;();</span><br><span class="line">	</span><br><span class="line">	//...</span><br><span class="line">	</span><br><span class="line">	public void addPrimarySources(Collection&lt;Class&lt;?&gt;&gt; additionalPrimarySources) &#123;</span><br><span class="line">		this.primarySources.addAll(additionalPrimarySources);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	public void setSources(Set&lt;String&gt; sources) &#123;</span><br><span class="line">		Assert.notNull(sources, &quot;Sources must not be null&quot;);</span><br><span class="line">		this.sources = new LinkedHashSet&lt;&gt;(sources);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>primarySources与sources最直观的区别就是一个是Class集合，一个是String集合，但是两个变量<br>都是用来构建ApplicationContext。另一个则是，primarySources可以追加，但是sources则会被<br>后一个sources覆盖。</p>
+<h3 id="ApplicationContextFactory-初始化ApplicationContext"><a href="#ApplicationContextFactory-初始化ApplicationContext" class="headerlink" title="ApplicationContextFactory - 初始化ApplicationContext"></a><code>ApplicationContextFactory</code> - 初始化ApplicationContext</h3><h3 id=""><a href="#" class="headerlink" title=""></a></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">   // SpringApplication.class</span><br><span class="line">protected void load(ApplicationContext context, Object[] sources) &#123;</span><br><span class="line">	if (logger.isDebugEnabled()) &#123;</span><br><span class="line">		logger.debug(&quot;Loading source &quot; + StringUtils.arrayToCommaDelimitedString(sources));</span><br><span class="line">	&#125;</span><br><span class="line">	// BeanDefinitionLoader是用于load环境的帮助类</span><br><span class="line">	BeanDefinitionLoader loader = createBeanDefinitionLoader(getBeanDefinitionRegistry(context), sources);</span><br><span class="line">	if (this.beanNameGenerator != null) &#123;</span><br><span class="line">		loader.setBeanNameGenerator(this.beanNameGenerator);</span><br><span class="line">	&#125;</span><br><span class="line">	if (this.resourceLoader != null) &#123;</span><br><span class="line">		loader.setResourceLoader(this.resourceLoader);</span><br><span class="line">	&#125;</span><br><span class="line">	if (this.environment != null) &#123;</span><br><span class="line">		loader.setEnvironment(this.environment);</span><br><span class="line">	&#125;</span><br><span class="line">	loader.load();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>BeanDefinitionLoader</code> - </p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/09/Java-SPI/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/09/Java-SPI/" class="post-title-link" itemprop="url">Java SPI</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-02-09 09:10:03 / Modified: 09:22:55" itemprop="dateCreated datePublished" datetime="2023-02-09T09:10:03+08:00">2023-02-09</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/02/09/Java-SPI/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/09/Java-SPI/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>本文主要解析一下有关于Java的SPI技术。</p>
+<p>ServiceLoader继承了Iterable，所以，在基本的使用时可以将它理解为一个迭代器，现在，<br>要关注的是ServiceLoader是如何加载类并实例化的。</p>
+<p>ServiceLoader内部依然是通过ClassLoader#getResources()查询实现了接口的类全限定路径。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">private Class&lt;?&gt; nextProviderClass() &#123;</span><br><span class="line">    if (configs == null) &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            // 注意这里的PREFIX被限定为META-INF/services</span><br><span class="line">            String fullName = PREFIX + service.getName();</span><br><span class="line">            if (loader == null) &#123;</span><br><span class="line">                configs = ClassLoader.getSystemResources(fullName);</span><br><span class="line">            &#125; else if (loader == ClassLoaders.platformClassLoader()) &#123;</span><br><span class="line">                // The platform classloader doesn&#x27;t have a class path,</span><br><span class="line">                // but the boot loader might.</span><br><span class="line">                if (BootLoader.hasClassPath()) &#123;</span><br><span class="line">                    configs = BootLoader.findResources(fullName);</span><br><span class="line">                &#125; else &#123;</span><br><span class="line">                    configs = Collections.emptyEnumeration();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else &#123;</span><br><span class="line">                configs = loader.getResources(fullName);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; catch (IOException x) &#123;</span><br><span class="line">            fail(service, &quot;Error locating configuration files&quot;, x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    while ((pending == null) || !pending.hasNext()) &#123;</span><br><span class="line">        if (!configs.hasMoreElements()) &#123;</span><br><span class="line">            return null;</span><br><span class="line">        &#125;</span><br><span class="line">        pending = parse(configs.nextElement());</span><br><span class="line">    &#125;</span><br><span class="line">    String cn = pending.next();</span><br><span class="line">    try &#123;</span><br><span class="line">        return Class.forName(cn, false, loader);</span><br><span class="line">    &#125; catch (ClassNotFoundException x) &#123;</span><br><span class="line">        fail(service, &quot;Provider &quot; + cn + &quot; not found&quot;);</span><br><span class="line">        return null;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>META-INF&#x2F;services</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/08/Spring-Bean%E7%BC%93%E5%AD%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/08/Spring-Bean%E7%BC%93%E5%AD%98/" class="post-title-link" itemprop="url">Spring Bean缓存</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-02-08 18:55:19" itemprop="dateCreated datePublished" datetime="2023-02-08T18:55:19+08:00">2023-02-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-02-09 10:07:21" itemprop="dateModified" datetime="2023-02-09T10:07:21+08:00">2023-02-09</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/02/08/Spring-Bean%E7%BC%93%E5%AD%98/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/08/Spring-Bean缓存/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>主要设计的类<code>DefaultSingletonBeanRegistry</code>，<code>AbstractBeanFactory</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DefaultSingletonBeanRegistry</span> <span class="keyword">extends</span> <span class="title class_">SimpleAliasRegistry</span> <span class="keyword">implements</span> <span class="title class_">SingletonBeanRegistry</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">/** Cache of singleton objects: bean name to bean instance. */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; singletonObjects = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;(<span class="number">256</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Cache of singleton factories: bean name to ObjectFactory. */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, ObjectFactory&lt;?&gt;&gt; singletonFactories = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;(<span class="number">16</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Cache of early singleton objects: bean name to bean instance. */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Object&gt; earlySingletonObjects = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;(<span class="number">16</span>);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Spring无法解决的循环依赖问题，当两个循环依赖的类的注入方式是构造器注入时则无法解决循环依赖问题，<br>因为在类初始化时将直接导致初始化失败，因为无法查询和创建需要被注入的依赖。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/07/Debian-DPKG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/07/Debian-DPKG/" class="post-title-link" itemprop="url">Debian DPKG</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-02-07 09:17:38 / Modified: 09:53:38" itemprop="dateCreated datePublished" datetime="2023-02-07T09:17:38+08:00">2023-02-07</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/02/07/Debian-DPKG/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/07/Debian-DPKG/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <blockquote>
+<p>首先，这只是一个简单的笔记，用于记录<code>dpkg</code>的使用，所以并可能并不会详细展开。</p>
+</blockquote>
+<p>dpkg是Debian的包管理工具，同时它适用与Ubuntu，最主要的用途是打包需要安装的运行库，执行程序，<br>同时用于创建，删除，管理Debian包。</p>
+<h2 id="dpkg-deb-Debian包归档工具"><a href="#dpkg-deb-Debian包归档工具" class="headerlink" title="dpkg-deb - Debian包归档工具"></a>dpkg-deb - Debian包归档工具</h2><p><code>dpkg-deb</code>用于归档生成.deb文件，用于dpkg（这里可以直接适用dpkg调用dpkg-deb）</p>
+<h3 id="dpkg包结构"><a href="#dpkg包结构" class="headerlink" title="dpkg包结构"></a>dpkg包结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;deb_dir&gt;</span><br><span class="line">    |</span><br><span class="line">    |-----DEBIAN</span><br><span class="line">    |      |-----control</span><br><span class="line">    |</span><br><span class="line">    |-----opt</span><br><span class="line">    |      |-----lib_name</span><br><span class="line">    |               |-----bin</span><br><span class="line">    |               |-----include</span><br><span class="line">    |               |-----lib</span><br></pre></td></tr></table></figure>
+
+<p>整个包结构中之后DEBIAN目录是必须的，DEBIAN目录下包含一个control文件，用于描述deb文件，<br>其他的目录将在安装时在根目录展开，如deb包下的<code>/opt/lib_name</code>路径将在被复制到<code>/opt</code>下，如果<br>lib_name不存在，同时创建lib_name目录。所以，你可以把deb下的目录理解成根目录的映射。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/02/CMake-rpath/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/02/CMake-rpath/" class="post-title-link" itemprop="url">CMake rpath</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-02-02 09:29:38 / Modified: 09:34:03" itemprop="dateCreated datePublished" datetime="2023-02-02T09:29:38+08:00">2023-02-02</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/02/02/CMake-rpath/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/02/CMake-rpath/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>这里主要讨论一下在MacOSX上编译动态运行库后，在移动库后无法找到相应依赖的问题。其实<br>本质上还是无法在指定的目录中查找到依赖库（与Windows上不同的一点时，在Windows上可以<br>通过环境变量<code>PATH</code>，在<code>PATH</code>中搜索被依赖的运行库，同时，Windows上的依赖库还会自动<br>搜索运行库所在目录下是否存在依赖库）。</p>
+<p>CMAKE_BUILD_WITH_INSTALL_RPATH</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/01/31/spring-gateway/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/01/31/spring-gateway/" class="post-title-link" itemprop="url">spring-gateway</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-01-31 21:20:05" itemprop="dateCreated datePublished" datetime="2023-01-31T21:20:05+08:00">2023-01-31</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-02-02 17:01:51" itemprop="dateModified" datetime="2023-02-02T17:01:51+08:00">2023-02-02</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/01/31/spring-gateway/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/01/31/spring-gateway/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Spring Cloud Gateway基于Spring webflux</p>
+<h2 id="Route-Predicate-Factories"><a href="#Route-Predicate-Factories" class="headerlink" title="Route Predicate Factories"></a>Route Predicate Factories</h2><p>默认情况下，<code>RoutePredicateFactory</code>的实现通过<code>org.springframework.cloud.gateway.config.GatewayAutoConfiguration</code><br>被注入到运行环境中。</p>
+<h3 id="RoutePredicateFactory-创建Predicate"><a href="#RoutePredicateFactory-创建Predicate" class="headerlink" title="RoutePredicateFactory - 创建Predicate"></a><code>RoutePredicateFactory</code> - 创建<code>Predicate</code></h3><p><code>RoutePredicateFactory</code>是所有Predicated factory的基类，提供一个default的方法name()，<br>通过改方法用于区分获取需要的<code>RoutePredicateFactory</code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">RoutePredicateFactory</span>&lt;C&gt; <span class="keyword">extends</span> <span class="title class_">ShortcutConfigurable</span>, Configurable&lt;C&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">default</span> String <span class="title function_">name</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> NameUtils.normalizeRoutePredicateName(getClass());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Route-RouteLocator"><a href="#Route-RouteLocator" class="headerlink" title="Route RouteLocator"></a><code>Route</code> <code>RouteLocator</code></h2><p>核心初始化组件<code>RouteDefinitionRouteLocator</code>，它是<code>RouteLocator</code>的一个子类， 用于创建需要的<br>Predicate, Filter，并将它们与uri关联，创建一个可用的Route。Route通过静态内部类builder创建</p>
+<p>RouteDefinitionLocator</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2022/12/03/windows-mysql-forget-root-password/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -425,270 +982,11 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2022/04/26/nginx-config-directory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHGUARDIAN's Time Space">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/04/26/nginx-config-directory/" class="post-title-link" itemprop="url">Nginx配置目录</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-04-26 23:36:36" itemprop="dateCreated datePublished" datetime="2022-04-26T23:36:36+08:00">2022-04-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-02 11:10:16" itemprop="dateModified" datetime="2022-12-02T11:10:16+08:00">2022-12-02</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/2022/04/26/nginx-config-directory/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/04/26/nginx-config-directory/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Nginx配置目录"><a href="#Nginx配置目录" class="headerlink" title="Nginx配置目录"></a>Nginx配置目录</h1><blockquote>
-<p>请不要将所有配置写入<code>/etc/nginx/nginx.conf</code>中。</p>
-</blockquote>
-<blockquote>
-<p>首先，这篇文章是为了解决一个对初次接触nginx的运维人员常会出现的不太好的习惯：<br>总是将配置文件写入<code>nginx.conf</code>中。</p>
-</blockquote>
-<p>首先，为什么新手会将所有配置写入<code>nginx.conf</code>，因为如果没有其他人的引导，在网上搜索资料时，给出的答案基本都会是直接的配置文件修改，但一般不会提到在哪里，为什么修改这个文件。</p>
-<h2 id="sites-available与sites-enabled-Ubuntu下的nginx默认生成"><a href="#sites-available与sites-enabled-Ubuntu下的nginx默认生成" class="headerlink" title="sites-available与sites-enabled (Ubuntu下的nginx默认生成)"></a>sites-available与sites-enabled (Ubuntu下的nginx默认生成)</h2><h3 id="给出使用方法："><a href="#给出使用方法：" class="headerlink" title="给出使用方法："></a>给出使用方法：</h3><blockquote>
-<p>在sites-available中存放实际的配置文件（不需要.conf后缀），同时将需要激活的配置文件软链接到sites-enabled下。</p>
-</blockquote>
-<h3 id="说明："><a href="#说明：" class="headerlink" title="说明："></a>说明：</h3><blockquote>
-<p><code>sites-available</code>添加配置，<code>sites-enabled</code>激活配置。</p>
-</blockquote>
-<p>在<code>/etc/nginx</code>目录下有两个子目录，分别是<code>sites-available</code>，<code>sites-enabled</code>，默认在<code>sites-available</code>中有一个默认的配置文件<code>default</code>，同时，在<code>sites-enabled</code>存放了这个default配置文件的软链接。</p>
-<p>通过查看<code>nginx.conf</code>，可以找到下面一个配置：</p>
-<blockquote>
-<p>include &#x2F;etc&#x2F;nginx&#x2F;sites-enabled&#x2F;*;</p>
-</blockquote>
-<p>将在sites-enabled中所有的配置文件导入，所以，当需要配置站点时，可以在<code>sites-enabled</code>下为每一个站点添加单独的配置文件，但是，不建议直接在<code>sites-enabled</code>下直接创建配置文件，通用方法时，在<code>sites-available</code>创建配置文件（<code>sites-available</code>下的配置文件默认不会被应用），然后，将需要激活的配置软链接到<code>sites-enabled</code>，这样，即增加了配置的灵活性，同时可以保留配置文件。</p>
-<h2 id="snippets-x2F-snakeoil-conf-Ubuntu下的nginx默认生成"><a href="#snippets-x2F-snakeoil-conf-Ubuntu下的nginx默认生成" class="headerlink" title="snippets&#x2F;snakeoil.conf (Ubuntu下的nginx默认生成)"></a>snippets&#x2F;snakeoil.conf (Ubuntu下的nginx默认生成)</h2><p>主要用于证书存放</p>
-<blockquote>
-<p>建议在<code>snippets</code>下创建一个与域名同名的配置文件，如为域名<em>domain.com</em>在<code>snippets</code>创建一个<em>domain.com.conf</em>配置文件用于指向证书与密钥，然后在域名的配置文件下添加配置<code>include snippets/domain.com.conf;</code></p>
-</blockquote>
-<h3 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h3><h4 id="证书颁发"><a href="#证书颁发" class="headerlink" title="证书颁发"></a>证书颁发</h4><ul>
-<li><a target="_blank" rel="noopener" href="https://letsencrypt.org/">Let’s Encrypt</a> - 一个免费的证书签发网站</li>
-<li><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh">An ACME Shell script: acme.sh</a> - 用于创建证书的一个脚本工具，<strong>工具不会产生环境污染</strong>。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2022/03/16/node/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHGUARDIAN's Time Space">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/16/node/" class="post-title-link" itemprop="url">node</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-03-16 00:21:10 / Modified: 00:27:09" itemprop="dateCreated datePublished" datetime="2022-03-16T00:21:10+08:00">2022-03-16</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/2022/03/16/node/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/03/16/node/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="Babel-兼容性转换"><a href="#Babel-兼容性转换" class="headerlink" title="Babel - 兼容性转换"></a>Babel - 兼容性转换</h2><h2 id="CommonJS-and-ES-module"><a href="#CommonJS-and-ES-module" class="headerlink" title="CommonJS and ES module"></a>CommonJS and ES module</h2><h2 id="V8-Javascirpt-engine"><a href="#V8-Javascirpt-engine" class="headerlink" title="V8 - Javascirpt engine"></a>V8 - Javascirpt engine</h2><p>V8提供一个Javascript运行时环境</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2022/03/15/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHGUARDIAN's Time Space">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/03/15/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-03-15 22:56:49" itemprop="dateCreated datePublished" datetime="2022-03-15T22:56:49+08:00">2022-03-15</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/2022/03/15/hello-world/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/03/15/hello-world/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="Next page"></i></a>
+  </nav>
 
 
 
@@ -753,7 +1051,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -785,7 +1083,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
