@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"blog.whguardian.xyz","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":true,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="CMake NoteFUNCTION vs MACROARGC ARGV ARGN ARGC ARGV ARGN  includeadd_subdirectory创建新的工作域，并继承调用add_subdirectory的工作域。 在Apple下链接framework target_link_libraries(lib_name “-framework “”)  在Apple下c++ -frame">
+  <meta name="description" content="CMake Note 这是一个我个人在使用CMake时记录的笔记。  FUNCTION vs MACROARGC ARGV ARGN ARGC ARGV ARGN  includeadd_subdirectory创建新的工作域，并继承调用add_subdirectory的工作域。 CMAKE_PREFIX_PATHfind_package 模块FindPackageHandleStandardAr">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cmake-note">
 <meta property="og:url" content="https://blog.whguardian.xyz/2022/12/01/cmake-note/index.html">
 <meta property="og:site_name" content="WHGUARDIAN&#39;s Time Space">
-<meta property="og:description" content="CMake NoteFUNCTION vs MACROARGC ARGV ARGN ARGC ARGV ARGN  includeadd_subdirectory创建新的工作域，并继承调用add_subdirectory的工作域。 在Apple下链接framework target_link_libraries(lib_name “-framework “”)  在Apple下c++ -frame">
+<meta property="og:description" content="CMake Note 这是一个我个人在使用CMake时记录的笔记。  FUNCTION vs MACROARGC ARGV ARGN ARGC ARGV ARGN  includeadd_subdirectory创建新的工作域，并继承调用add_subdirectory的工作域。 CMAKE_PREFIX_PATHfind_package 模块FindPackageHandleStandardAr">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2022-12-01T00:10:20.000Z">
-<meta property="article:modified_time" content="2022-12-03T08:37:36.040Z">
+<meta property="article:modified_time" content="2023-02-24T00:38:19.053Z">
 <meta property="article:author" content="Hao Wang">
 <meta name="twitter:card" content="summary">
 
@@ -180,7 +180,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-03 16:37:36" itemprop="dateModified" datetime="2022-12-03T16:37:36+08:00">2022-12-03</time>
+                <time title="Modified: 2023-02-24 08:38:19" itemprop="dateModified" datetime="2023-02-24T08:38:19+08:00">2023-02-24</time>
               </span>
 
           
@@ -208,23 +208,52 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="CMake-Note"><a href="#CMake-Note" class="headerlink" title="CMake Note"></a>CMake Note</h1><h2 id="FUNCTION-vs-MACRO"><a href="#FUNCTION-vs-MACRO" class="headerlink" title="FUNCTION vs MACRO"></a>FUNCTION vs MACRO</h2><h3 id="ARGC-ARGV-ARGN"><a href="#ARGC-ARGV-ARGN" class="headerlink" title="ARGC ARGV ARGN"></a>ARGC ARGV ARGN</h3><ul>
+        <h1 id="CMake-Note"><a href="#CMake-Note" class="headerlink" title="CMake Note"></a>CMake Note</h1><blockquote>
+<p>这是一个我个人在使用CMake时记录的笔记。</p>
+</blockquote>
+<h2 id="FUNCTION-vs-MACRO"><a href="#FUNCTION-vs-MACRO" class="headerlink" title="FUNCTION vs MACRO"></a>FUNCTION vs MACRO</h2><h3 id="ARGC-ARGV-ARGN"><a href="#ARGC-ARGV-ARGN" class="headerlink" title="ARGC ARGV ARGN"></a>ARGC ARGV ARGN</h3><ul>
 <li>ARGC</li>
 <li>ARGV</li>
 <li>ARGN</li>
 </ul>
-<h2 id="include"><a href="#include" class="headerlink" title="include"></a>include</h2><h2 id="add-subdirectory"><a href="#add-subdirectory" class="headerlink" title="add_subdirectory"></a>add_subdirectory</h2><p>创建新的工作域，并继承调用add_subdirectory的工作域。</p>
-<h2 id="在Apple下链接framework"><a href="#在Apple下链接framework" class="headerlink" title="在Apple下链接framework"></a>在Apple下链接framework</h2><blockquote>
-<p>target_link_libraries(lib_name “-framework <framework_name>“”)</p>
-</blockquote>
-<p>在Apple下<code>c++ -framework framework_name</code></p>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><blockquote>
-<p>if(APPLE)<br>  target_link_libraries(lib_name “-framework CoreFoundation””)<br>endif</p>
-</blockquote>
+<h2 id="include"><a href="#include" class="headerlink" title="include"></a><del>include</del></h2><h2 id="add-subdirectory"><a href="#add-subdirectory" class="headerlink" title="add_subdirectory"></a>add_subdirectory</h2><p>创建新的工作域，并继承调用add_subdirectory的工作域。</p>
 <h2 id="CMAKE-PREFIX-PATH"><a href="#CMAKE-PREFIX-PATH" class="headerlink" title="CMAKE_PREFIX_PATH"></a>CMAKE_PREFIX_PATH</h2><h3 id="find-package"><a href="#find-package" class="headerlink" title="find_package"></a>find_package</h3><ul>
 <li>模块<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/module/FindPackageHandleStandardArgs.html">FindPackageHandleStandardArgs</a></li>
 </ul>
-<h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><h3 id="FindPackageHandleStandardArgs"><a href="#FindPackageHandleStandardArgs" class="headerlink" title="FindPackageHandleStandardArgs"></a>FindPackageHandleStandardArgs</h3>
+<h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><h3 id="FindPackageHandleStandardArgs"><a href="#FindPackageHandleStandardArgs" class="headerlink" title="FindPackageHandleStandardArgs"></a>FindPackageHandleStandardArgs</h3><h2 id="CMake-属性"><a href="#CMake-属性" class="headerlink" title="CMake 属性"></a>CMake 属性</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/prop_tgt/MSVC_RUNTIME_LIBRARY.html">MSVC_RUNTIME_LIBRARY</a><blockquote>
+<p>这里主要涉及到的是MSVC下的运行时库链接问题，分为动态链接与静态链接，在默认情况都是才是动态链接的形式链接<br>到运行时库。</p>
+</blockquote>
+<blockquote>
+<p>使用该属性的核心是保证每一个依赖项的运行时库相同，官网已经为我们提供了简单直观的实例。</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">add_executable(foo foo.c)</span><br><span class="line"># MultiThreaded表示需要使用静态链接，但是注意，在Debug与Release下是链接到不同的库，</span><br><span class="line"># 所以这里使用了cmake-generator-expressions，在Debug模式时实际生成MultiThreadedDebug（MTd），</span><br><span class="line"># 其他则是MultiThreaded（/MT）</span><br><span class="line">set_property(TARGET foo PROPERTY</span><br><span class="line">  MSVC_RUNTIME_LIBRARY &quot;MultiThreaded$&lt;$&lt;CONFIG:Debug&gt;:Debug&gt;&quot;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/prop_tgt/VS_DEBUGGER_ENVIRONMENT.html">VS_DEBUGGER_ENVIRONMENT</a><blockquote>
+<p>为Visual Studio C++设置debug环境，这里比较直观的例子是当执行文件与依赖项不在<br>同一个目录下时，执行文件会因为无法获取依赖项而导致失败。这里涉及到Windows下的环境<br>变量<code>PATH</code>，依赖项不在<code>PATH</code>下，无法被执行文件发现，通过设置<em>VS_DEBUGGER_ENVIRONMENT</em><br>可以添加额外的环境路径</p>
+</blockquote>
+</li>
+</ul>
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2><h3 id="项目顶级目录下的子目录创建"><a href="#项目顶级目录下的子目录创建" class="headerlink" title="项目顶级目录下的子目录创建"></a>项目顶级目录下的子目录创建</h3><p>在Visual Studio等IDE进行开发时，用户可以创建虚拟的目录用于管理项目，这里CMake通过<code>USE_FOLDERS</code>属性可以开启<br>该功能，使用FOLDER可以给target这是目录。这里，全局属性USE_FOLDERS必须被设置为ON。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set_property(GLOBAL PROPERTY USE_FOLDERS ON)</span><br></pre></td></tr></table></figure>
+
+<p>通过为target设置目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set_target_properties(&lt;target_name&gt; PROPERTIES FOLDER &lt;dir for target&gt;)</span><br></pre></td></tr></table></figure>
+
+<p>额外，CMake会产生一些自动的target，如<code>INSTALL</code>， <code>ALL_BUILD</code>，这些被成为预定义目标，<br>则需要通过设置属性<code>PREDEFINED_TARGETS_FOLDER</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set_property(GLOBAL PROPERTY PREDEFINED_TARGETS_FOLDER &quot;CMakeTargets&quot;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="在Apple下链接framework"><a href="#在Apple下链接framework" class="headerlink" title="在Apple下链接framework"></a>在Apple下链接framework</h3><blockquote>
+<p>target_link_libraries(lib_name “-framework <framework_name>“”)</p>
+</blockquote>
+<p>在Apple下<code>c++ -framework framework_name</code></p>
+<h4 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h4><blockquote>
+<p>if(APPLE)<br>  target_link_libraries(lib_name “-framework CoreFoundation””)<br>endif</p>
+</blockquote>
+
     </div>
 
     
@@ -311,7 +340,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CMake-Note"><span class="nav-number">1.</span> <span class="nav-text">CMake Note</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FUNCTION-vs-MACRO"><span class="nav-number">1.1.</span> <span class="nav-text">FUNCTION vs MACRO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARGC-ARGV-ARGN"><span class="nav-number">1.1.1.</span> <span class="nav-text">ARGC ARGV ARGN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-number">1.2.</span> <span class="nav-text">include</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#add-subdirectory"><span class="nav-number">1.3.</span> <span class="nav-text">add_subdirectory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%A8Apple%E4%B8%8B%E9%93%BE%E6%8E%A5framework"><span class="nav-number">1.4.</span> <span class="nav-text">在Apple下链接framework</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">1.4.1.</span> <span class="nav-text">例子</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMAKE-PREFIX-PATH"><span class="nav-number">1.5.</span> <span class="nav-text">CMAKE_PREFIX_PATH</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#find-package"><span class="nav-number">1.5.1.</span> <span class="nav-text">find_package</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Modules"><span class="nav-number">1.6.</span> <span class="nav-text">Modules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FindPackageHandleStandardArgs"><span class="nav-number">1.6.1.</span> <span class="nav-text">FindPackageHandleStandardArgs</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CMake-Note"><span class="nav-number">1.</span> <span class="nav-text">CMake Note</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FUNCTION-vs-MACRO"><span class="nav-number">1.1.</span> <span class="nav-text">FUNCTION vs MACRO</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ARGC-ARGV-ARGN"><span class="nav-number">1.1.1.</span> <span class="nav-text">ARGC ARGV ARGN</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#include"><span class="nav-number">1.2.</span> <span class="nav-text">include</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#add-subdirectory"><span class="nav-number">1.3.</span> <span class="nav-text">add_subdirectory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMAKE-PREFIX-PATH"><span class="nav-number">1.4.</span> <span class="nav-text">CMAKE_PREFIX_PATH</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#find-package"><span class="nav-number">1.4.1.</span> <span class="nav-text">find_package</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Modules"><span class="nav-number">1.5.</span> <span class="nav-text">Modules</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#FindPackageHandleStandardArgs"><span class="nav-number">1.5.1.</span> <span class="nav-text">FindPackageHandleStandardArgs</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CMake-%E5%B1%9E%E6%80%A7"><span class="nav-number">1.6.</span> <span class="nav-text">CMake 属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">1.7.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E9%A1%B6%E7%BA%A7%E7%9B%AE%E5%BD%95%E4%B8%8B%E7%9A%84%E5%AD%90%E7%9B%AE%E5%BD%95%E5%88%9B%E5%BB%BA"><span class="nav-number">1.7.1.</span> <span class="nav-text">项目顶级目录下的子目录创建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8Apple%E4%B8%8B%E9%93%BE%E6%8E%A5framework"><span class="nav-number">1.7.2.</span> <span class="nav-text">在Apple下链接framework</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%8B%E5%AD%90"><span class="nav-number">1.7.2.1.</span> <span class="nav-text">例子</span></a></li></ol></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -325,7 +354,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

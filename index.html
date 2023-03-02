@@ -145,6 +145,267 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/03/02/Oracle-database-on-Apple-M-chips/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/03/02/Oracle-database-on-Apple-M-chips/" class="post-title-link" itemprop="url">Oracle database on Apple M chips</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-03-02 21:09:59 / Modified: 22:51:13" itemprop="dateCreated datePublished" datetime="2023-03-02T21:09:59+08:00">2023-03-02</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/03/02/Oracle-database-on-Apple-M-chips/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/03/02/Oracle-database-on-Apple-M-chips/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在Apple M芯片上运行Oracle数据库</p>
+<p>当前，Oracle数据库并不支持在Apple M芯片上运行，使用Docker也无法使用，需要使用<br>colima。</p>
+<p>安装colima</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install colima</span><br></pre></td></tr></table></figure>
+
+<p>启动colima</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">基于x86_64架构，使用内存为4GiB</span></span><br><span class="line">colima start --arch x86_64 --memory 4</span><br></pre></td></tr></table></figure>
+
+<p>使用docker启动oracle数据库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 1521:1521 -e ORACLE_PASSWORD=&lt;your password&gt; -v oracle-volume:/opt/oracle/oradata gvenzl/oracle-xe</span><br></pre></td></tr></table></figure>
+
+<h3 id="一个简单的启动脚本"><a href="#一个简单的启动脚本" class="headerlink" title="一个简单的启动脚本"></a>一个简单的启动脚本</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash -e</span></span><br><span class="line"></span><br><span class="line">VERSION=latest</span><br><span class="line">PASSWORD=sys</span><br><span class="line"></span><br><span class="line">usage() &#123;</span><br><span class="line">cat &lt;&lt; EOF</span><br><span class="line"></span><br><span class="line">Run Oracle database on Apple M chip.</span><br><span class="line"></span><br><span class="line">Parameters:</span><br><span class="line">    -p: oracle database password, default for &#x27;sys&#x27;</span><br><span class="line">    -v: oracle-e version</span><br><span class="line">EOF</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">while getopts &quot;h:p&quot; optname; do</span><br><span class="line">    case &quot;$&#123;optname&#125;&quot; in</span><br><span class="line">        &quot;h&quot;)</span><br><span class="line">          usgae</span><br><span class="line">          exit 0</span><br><span class="line">          ;;</span><br><span class="line">        &quot;p&quot;)</span><br><span class="line">          PASSWORD=&quot;$&#123;OPTARG&#125;&quot;</span><br><span class="line">          ;;</span><br><span class="line">        &quot;v&quot;)</span><br><span class="line">          VERSION=&quot;$&#123;OPTARG&#125;&quot;</span><br><span class="line">          ;;</span><br><span class="line">    esac</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">CONTAINER_RUNTIME=$(which docker 2&gt;/dev/null) || </span><br><span class="line">&#123;</span><br><span class="line">    echo &quot;There is no docker in your PATH&quot;</span><br><span class="line">    exit 1</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">arch=$(uname -m)</span><br><span class="line"></span><br><span class="line">if [ $arch = &quot;arm64&quot; ]</span><br><span class="line">then</span><br><span class="line">    echo &quot;Run oracle database on Apple M chip.&quot;</span><br><span class="line">    COLIMA=$(brew list | awk &#x27;/colima/ &#123;print&#125;&#x27;)</span><br><span class="line"></span><br><span class="line">    if [ -z $COLIMA ]</span><br><span class="line">    then</span><br><span class="line">        echo &quot;No colima, try to install...&quot;</span><br><span class="line">        brew install colima</span><br><span class="line">    fi</span><br><span class="line"></span><br><span class="line">    colima start --arch x86_64 --memory 4</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">dockr pull gvenzl/oracle-xe:21-full</span></span><br><span class="line"></span><br><span class="line">if [ -z $PASSWORD ]</span><br><span class="line">then</span><br><span class="line">    PASSWORD=sys</span><br><span class="line">fi</span><br><span class="line"><span class="meta prompt_"></span></span><br><span class="line"><span class="meta prompt_">$</span><span class="language-bash">&#123;CONTAINER_RUNTIME&#125; run -d -p 1521:1521 -e ORACLE_PASSWORD=<span class="variable">$&#123;PASSWORD&#125;</span> gvenzl/oracle-xe:<span class="variable">$&#123;VERSION&#125;</span></span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="这个脚本暂时没有编写结束相关，参数相关内容，所以只能用作简单的启动脚本"><a href="#这个脚本暂时没有编写结束相关，参数相关内容，所以只能用作简单的启动脚本" class="headerlink" title="这个脚本暂时没有编写结束相关，参数相关内容，所以只能用作简单的启动脚本"></a>这个脚本暂时没有编写结束相关，参数相关内容，所以只能用作简单的启动脚本</h4><h3 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/abiosoft/colima">Colima</a> - container runtimes on macOS (and Linux) with minimal setup.</li>
+<li><a target="_blank" rel="noopener" href="https://hub.docker.com/r/gvenzl/oracle-xe">Oracle-xe</a> - Oracle-xe image</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/24/This-is/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/24/This-is/" class="post-title-link" itemprop="url">This is</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2023-02-24 08:45:19 / Modified: 08:51:18" itemprop="dateCreated datePublished" datetime="2023-02-24T08:45:19+08:00">2023-02-24</time>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/02/24/This-is/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/24/This-is/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><img src="/images/temp.jpeg"></p>
+<p>this</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hao Wang">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHGUARDIAN's Time Space">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/" class="post-title-link" itemprop="url">CMAKE_BUILD_TYPE and multi-config generator</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2023-02-23 15:24:55" itemprop="dateCreated datePublished" datetime="2023-02-23T15:24:55+08:00">2023-02-23</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-02-24 09:02:22" itemprop="dateModified" datetime="2023-02-24T09:02:22+08:00">2023-02-24</time>
+              </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Disqus: </span>
+    
+    <a title="disqus" href="/2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>首先，介绍一下<code>CMAKE_BUILD_TYPE</code>，在CMake的官网中有一段用来指出它是用于single-configuration generators的。</p>
+<p>这里，区分一下<em>single-configuration generator</em>和<em>multi-config generator</em>，<br>single-configuration generator在构建平台与环境的同时会生成构建类型，如<code>Debug</code>，<br><code>Release</code>，常见的在MacOSX上使用CLion时，默认情况下生成的是只有Debug构建环境的，而CLion默认使用的<br>是Ninja做为生成器，这里一个明显的特定是无法直接切换Debug与Release，如果要启用Release则需要<br><code>构建、执行、部署</code>，<code>Cmake</code>创建一个新的配置。multi-config generator则想Visual Studio一样，混合了多种<br>配置。</p>
+<p>而<code>CMAKE_BUILD_TYPE</code>只在single-configuration generator起作用，如下这一段<br>在MSVC下是错误的，CMAKE_BUILD_TYPE无法在MSVC中获取值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># WARNING: This is wrong for multi-config generators because they don&#x27;t use</span><br><span class="line">#          and typically don&#x27;t even set CMAKE_BUILD_TYPE</span><br><span class="line">string(TOLOWER $&#123;CMAKE_BUILD_TYPE&#125; build_type)</span><br><span class="line">if (build_type STREQUAL debug)</span><br><span class="line">  target_compile_definitions(exe1 PRIVATE DEBUG_BUILD)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
+
+<p>在multi-config generator中，只能在构建时选择构建类型，这里，<br>需要借助<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)">Generator expressions</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Works correctly for both single and multi-config generators</span><br><span class="line">target_compile_definitions(exe1 PRIVATE</span><br><span class="line">  $&lt;$&lt;CONFIG:Debug&gt;:DEBUG_BUILD&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>总的来说，在multi-config generator中，因为需要在构建过程中选择构建类型，直接的提供<br>CMAKE_BUILD_TYPE是无效的，因为构建类型是时刻在改变，这里需要借助Generator expressions<br>来动态修改构建类型</p>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html">cmake-buildsystem</a><blockquote>
+<p>Cmake的构建系统是高等级的抽象，用于在不同的系统，不同的生成器生成构建系统，注意，CMake本身并不参与项目<br>构建。</p>
+</blockquote>
+</li>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html#manual:cmake-generators(7)">cmake-generators</a><blockquote>
+<p>Cmake generator负责生成构建系统，这是cmake的核心功能。</p>
+</blockquote>
+</li>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)">cmake-generator-expressions</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/15/Spring-Open-Feign/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -698,290 +959,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2022/12/03/windows-mysql-forget-root-password/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHGUARDIAN's Time Space">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/12/03/windows-mysql-forget-root-password/" class="post-title-link" itemprop="url">windows-mysql-forget-root-password</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-12-03 13:47:20" itemprop="dateCreated datePublished" datetime="2022-12-03T13:47:20+08:00">2022-12-03</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-04 22:54:06" itemprop="dateModified" datetime="2022-12-04T22:54:06+08:00">2022-12-04</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/2022/12/03/windows-mysql-forget-root-password/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/12/03/windows-mysql-forget-root-password/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Windows下忘记mysql的root密码（–skip-grant-tables）"><a href="#Windows下忘记mysql的root密码（–skip-grant-tables）" class="headerlink" title="Windows下忘记mysql的root密码（–skip-grant-tables）"></a>Windows下忘记mysql的root密码（–skip-grant-tables）</h1><p>首先，需要注意my.ini的位置，一般，my.ini会在两个地方，第一个位置是在安装mysql服务的位置（举例，<br>C:&#x2F;Program Files&#x2F;MySQL&#x2F;MySQL Server X.Y），第二个位置地方则是Data的同级目录下（举例，<br>datadir的路径是C:&#x2F;ProgramData&#x2F;MySQL&#x2F;MySQL Server 8.0&#x2F;Data，则my.ini的位置是<br>C:&#x2F;ProgramData&#x2F;MySQL&#x2F;MySQL Server 8.0&#x2F;my.ini）。</p>
-<p>如果my.ini不在第一个位置，则在后面需要使用<a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/server-options.html#option_mysqld_defaults-file">–defaults-file</a>。</p>
-<h2 id="跳过grant-tables"><a href="#跳过grant-tables" class="headerlink" title="跳过grant tables"></a>跳过grant tables</h2><p>在windows上使用<code>--skip-grant-tables</code>的同时必须同时使用<code>--shared-memory</code>和<code>--named-pipe</code>中<br>的一个。</p>
-<blockquote>
-<p>mysql –defaults-file&#x3D;”C:\ProgramData\MySQL\MySQL Server 8.0\my.ini”<br>–console –skip-grant-tables –shared-memory</p>
-</blockquote>
-<blockquote>
-<p>mysql –defaults-file&#x3D;”C:\ProgramData\MySQL\MySQL Server 8.0\my.ini”<br>–console –skip-grant-tables –named-pipe</p>
-</blockquote>
-<h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><ul>
-<li>像上面说的一样，如果my.ini在mysql服务的安装位置上，则可以省略<code>--defaults-file</code>。</li>
-<li><code>--console</code> -用于设置默认错误日志目标为控制台，有利于与观察服务运行状态。</li>
-<li><code>--skip-grant-tables</code> - 跳过grant tables，这是必须的。</li>
-<li><code>--shared-memory</code>与<code>--named-pipe</code> - 二选一，注意，这两个协议只在windows上有效。<ul>
-<li>另外提一句，在linux下是<code>socket</code>（不是特指<code>TCP/IP</code>，<code>TCP/IP</code>是默认系统通用）</li>
-</ul>
-</li>
-</ul>
-<h3 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--skip-grant-tables将跳过grant tables，同时拒绝远程访问，并且给予任何人</span><br><span class="line">unrestricted access to all databases（不受限制地访问所有数据库）。</span><br></pre></td></tr></table></figure>
-
-<h4 id="另一种方法，修改my-ini"><a href="#另一种方法，修改my-ini" class="headerlink" title="另一种方法，修改my.ini"></a>另一种方法，修改<code>my.ini</code></h4><blockquote>
-<p>通过修改my.ini同样可以达到这种方法，通过在mysqld下添加<code>skip-grant-tables</code>与<br><code>shared-memory</code>(或<code>named-pipe</code>)同样可以达到上面的效果，同时，依然要注意my.ini<br>的位置，这也是网上有人说修改my.ini的原因，因为并没有正确加载。</p>
-</blockquote>
-<h2 id="mysql连接"><a href="#mysql连接" class="headerlink" title="mysql连接"></a>mysql连接</h2><p>这里比较简单，基本可以一笔带过，直接在terminal中键入<code>mysql</code>就可以直接连接到数据库。</p>
-<blockquote>
-<p>注意，如果使用了<code>--named-pipe</code>，在需要使用<code>mysql --protocol=pipe</code>，protocol的默认<br>是memory(–shared-memory)</p>
-</blockquote>
-<h2 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h2><h3 id="刷入权限"><a href="#刷入权限" class="headerlink" title="刷入权限"></a>刷入权限</h3><p>首先，接下来的操作需要权限，所以需要<code>FLUSH PRIVILEGES</code>获取权限</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [(none)] &gt; FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-
-<p>官方文档对于权限的描述如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">To cause a server started with --skip-grant-tables to load the grant tables at runtime, perform a privilege-flushing operation, which can be done in these ways:</span><br><span class="line"></span><br><span class="line">     Issue a MySQL FLUSH PRIVILEGES statement after connecting to the server.</span><br><span class="line"></span><br><span class="line">     Execute a mysqladmin flush-privileges or mysqladmin reload command from the command line.</span><br></pre></td></tr></table></figure>
-
-<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><p>这一个就是常规操作，简略地提供一种方法</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [(none)] &gt; ALTER USER &#x27;root&#x27;@&#x27;localhost&#x27; IDENTIFIED BY &#x27;&lt;your_passcode&gt;&#x27;;</span><br></pre></td></tr></table></figure>
-
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2022/12/02/opencv-build-zlib/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHGUARDIAN's Time Space">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/12/02/opencv-build-zlib/" class="post-title-link" itemprop="url">opencv-build-zlib</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2022-12-02 10:46:55 / Modified: 11:10:58" itemprop="dateCreated datePublished" datetime="2022-12-02T10:46:55+08:00">2022-12-02</time>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/2022/12/02/opencv-build-zlib/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/12/02/opencv-build-zlib/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="OpenCV-Build-ZLIB"><a href="#OpenCV-Build-ZLIB" class="headerlink" title="OpenCV - Build_ZLIB"></a>OpenCV - Build_ZLIB</h1><p>在编译OpenCV需要链接到第三方库，OpenCV已经为我们准备并放置在3rdparty下。</p>
-<p>这里比较特殊的是<code>BUILD_ZLIB</code>，在Windows下，如何设置BUILD_ZLIB为false，在编译时，依然<br>会编译并使用3rdparty下的zlib，发生这种现象的原因是下面的一段cmake，<br>位于<code>cmake/OpenCvFindLibsGrfmt.cmake</code>中。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"># --- zlib (required) ---</span><br><span class="line">if(BUILD_ZLIB)</span><br><span class="line">  ocv_clear_vars(ZLIB_FOUND)</span><br><span class="line">else()</span><br><span class="line">  ocv_clear_internal_cache_vars(ZLIB_LIBRARY ZLIB_INCLUDE_DIR)</span><br><span class="line">  if(ANDROID)</span><br><span class="line">    set(_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES $&#123;CMAKE_FIND_LIBRARY_SUFFIXES&#125;)</span><br><span class="line">    set(CMAKE_FIND_LIBRARY_SUFFIXES .so)</span><br><span class="line">  endif()</span><br><span class="line">  find_package(ZLIB &quot;$&#123;MIN_VER_ZLIB&#125;&quot;)</span><br><span class="line">  if(ANDROID)</span><br><span class="line">    set(CMAKE_FIND_LIBRARY_SUFFIXES $&#123;_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES&#125;)</span><br><span class="line">    unset(_zlib_ORIG_CMAKE_FIND_LIBRARY_SUFFIXES)</span><br><span class="line">  endif()</span><br><span class="line">  if(ZLIB_FOUND AND ANDROID)</span><br><span class="line">    if(ZLIB_LIBRARIES MATCHES &quot;/usr/lib.*/libz.so$&quot;)</span><br><span class="line">      set(ZLIB_LIBRARIES z)</span><br><span class="line">    endif()</span><br><span class="line">  endif()</span><br><span class="line">endif()</span><br><span class="line"></span><br><span class="line">if(NOT ZLIB_FOUND)</span><br><span class="line">  ocv_clear_vars(ZLIB_LIBRARY ZLIB_LIBRARIES ZLIB_INCLUDE_DIR)</span><br><span class="line"></span><br><span class="line">  set(ZLIB_LIBRARY zlib CACHE INTERNAL &quot;&quot;)</span><br><span class="line">  add_subdirectory(&quot;$&#123;OpenCV_SOURCE_DIR&#125;/3rdparty/zlib&quot;)</span><br><span class="line">  set(ZLIB_INCLUDE_DIR &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_SOURCE_DIR&#125;&quot; &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_BINARY_DIR&#125;&quot; CACHE INTERNAL &quot;&quot;)</span><br><span class="line">  set(ZLIB_INCLUDE_DIRS $&#123;ZLIB_INCLUDE_DIR&#125;)</span><br><span class="line">  set(ZLIB_LIBRARIES $&#123;ZLIB_LIBRARY&#125;)</span><br><span class="line"></span><br><span class="line">  ocv_parse_header2(ZLIB &quot;$&#123;$&#123;ZLIB_LIBRARY&#125;_SOURCE_DIR&#125;/zlib.h&quot; ZLIB_VERSION)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
-<p>从上面的cmake片段我们可以知道，zlib在OpenCV的编译中是必须的，默认，BUILD_ZLIB设置<br>为true，这时，ZLIB_FOUND会被清理，总是会进入第二个<code>if(NOT ZLIB_FOUND)</code>，<code> add_subdirectory(&quot;$&#123;OpenCV_SOURCE_DIR&#125;/3rdparty/zlib&quot;)</code>。如果将BUILD_ZLIB<br>设置为false，则会先进入第一个if(BUILD_ZLIB)的else中，尝试通过<code>find_package(ZLIB &quot;$&#123;MIN_VER_ZLIB&#125;&quot;)</code><br>查找系统中的zlib（这也是为什么在MacOS中设置BUILD_ZLIB&#x3D;false会起作用，因为zlib已经<br>成为MacOS的一部分）</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2022/12/01/cmake-note/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hao Wang">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHGUARDIAN's Time Space">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2022/12/01/cmake-note/" class="post-title-link" itemprop="url">cmake-note</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2022-12-01 08:10:20" itemprop="dateCreated datePublished" datetime="2022-12-01T08:10:20+08:00">2022-12-01</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-12-03 16:37:36" itemprop="dateModified" datetime="2022-12-03T16:37:36+08:00">2022-12-03</time>
-              </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Disqus: </span>
-    
-    <a title="disqus" href="/2022/12/01/cmake-note/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2022/12/01/cmake-note/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="CMake-Note"><a href="#CMake-Note" class="headerlink" title="CMake Note"></a>CMake Note</h1><h2 id="FUNCTION-vs-MACRO"><a href="#FUNCTION-vs-MACRO" class="headerlink" title="FUNCTION vs MACRO"></a>FUNCTION vs MACRO</h2><h3 id="ARGC-ARGV-ARGN"><a href="#ARGC-ARGV-ARGN" class="headerlink" title="ARGC ARGV ARGN"></a>ARGC ARGV ARGN</h3><ul>
-<li>ARGC</li>
-<li>ARGV</li>
-<li>ARGN</li>
-</ul>
-<h2 id="include"><a href="#include" class="headerlink" title="include"></a>include</h2><h2 id="add-subdirectory"><a href="#add-subdirectory" class="headerlink" title="add_subdirectory"></a>add_subdirectory</h2><p>创建新的工作域，并继承调用add_subdirectory的工作域。</p>
-<h2 id="在Apple下链接framework"><a href="#在Apple下链接framework" class="headerlink" title="在Apple下链接framework"></a>在Apple下链接framework</h2><blockquote>
-<p>target_link_libraries(lib_name “-framework <framework_name>“”)</p>
-</blockquote>
-<p>在Apple下<code>c++ -framework framework_name</code></p>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><blockquote>
-<p>if(APPLE)<br>  target_link_libraries(lib_name “-framework CoreFoundation””)<br>endif</p>
-</blockquote>
-<h2 id="CMAKE-PREFIX-PATH"><a href="#CMAKE-PREFIX-PATH" class="headerlink" title="CMAKE_PREFIX_PATH"></a>CMAKE_PREFIX_PATH</h2><h3 id="find-package"><a href="#find-package" class="headerlink" title="find_package"></a>find_package</h3><ul>
-<li>模块<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/module/FindPackageHandleStandardArgs.html">FindPackageHandleStandardArgs</a></li>
-</ul>
-<h2 id="Modules"><a href="#Modules" class="headerlink" title="Modules"></a>Modules</h2><h3 id="FindPackageHandleStandardArgs"><a href="#FindPackageHandleStandardArgs" class="headerlink" title="FindPackageHandleStandardArgs"></a>FindPackageHandleStandardArgs</h3>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1051,7 +1028,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">16</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

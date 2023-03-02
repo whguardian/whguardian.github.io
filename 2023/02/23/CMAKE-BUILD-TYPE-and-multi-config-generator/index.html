@@ -20,19 +20,19 @@
     var CONFIG = {"hostname":"blog.whguardian.xyz","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"disqus","storage":true,"lazyload":true,"nav":null,"activeClass":"disqus"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="首先，这只是一个简单的笔记，用于记录dpkg的使用，所以并可能并不会详细展开。  dpkg是Debian的包管理工具，同时它适用与Ubuntu，最主要的用途是打包需要安装的运行库，执行程序，同时用于创建，删除，管理Debian包。 dpkg-deb - Debian包归档工具dpkg-deb用于归档生成.deb文件，用于dpkg（这里可以直接适用dpkg调用dpkg-deb） dpkg包结构12">
+  <meta name="description" content="首先，介绍一下CMAKE_BUILD_TYPE，在CMake的官网中有一段用来指出它是用于single-configuration generators的。 这里，区分一下single-configuration generator和multi-config generator，single-configuration generator在构建平台与环境的同时会生成构建类型，如Debug，Rele">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Debian DPKG">
-<meta property="og:url" content="https://blog.whguardian.xyz/2023/02/07/Debian-DPKG/index.html">
+<meta property="og:title" content="CMAKE_BUILD_TYPE and multi-config generator">
+<meta property="og:url" content="https://blog.whguardian.xyz/2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/index.html">
 <meta property="og:site_name" content="WHGUARDIAN&#39;s Time Space">
-<meta property="og:description" content="首先，这只是一个简单的笔记，用于记录dpkg的使用，所以并可能并不会详细展开。  dpkg是Debian的包管理工具，同时它适用与Ubuntu，最主要的用途是打包需要安装的运行库，执行程序，同时用于创建，删除，管理Debian包。 dpkg-deb - Debian包归档工具dpkg-deb用于归档生成.deb文件，用于dpkg（这里可以直接适用dpkg调用dpkg-deb） dpkg包结构12">
+<meta property="og:description" content="首先，介绍一下CMAKE_BUILD_TYPE，在CMake的官网中有一段用来指出它是用于single-configuration generators的。 这里，区分一下single-configuration generator和multi-config generator，single-configuration generator在构建平台与环境的同时会生成构建类型，如Debug，Rele">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-02-07T01:17:38.000Z">
-<meta property="article:modified_time" content="2023-02-07T01:53:38.023Z">
+<meta property="article:published_time" content="2023-02-23T07:24:55.000Z">
+<meta property="article:modified_time" content="2023-02-24T01:02:22.363Z">
 <meta property="article:author" content="Hao Wang">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://blog.whguardian.xyz/2023/02/07/Debian-DPKG/">
+<link rel="canonical" href="https://blog.whguardian.xyz/2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/">
 
 
 <script id="page-configurations">
@@ -45,7 +45,7 @@
   };
 </script>
 
-  <title>Debian DPKG | WHGUARDIAN's Time Space</title>
+  <title>CMAKE_BUILD_TYPE and multi-config generator | WHGUARDIAN's Time Space</title>
   
 
 
@@ -150,7 +150,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/07/Debian-DPKG/">
+    <link itemprop="mainEntityOfPage" href="https://blog.whguardian.xyz/2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -163,7 +163,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Debian DPKG
+          CMAKE_BUILD_TYPE and multi-config generator
         </h1>
 
         <div class="post-meta">
@@ -172,10 +172,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
-              
 
-              <time title="Created: 2023-02-07 09:17:38 / Modified: 09:53:38" itemprop="dateCreated datePublished" datetime="2023-02-07T09:17:38+08:00">2023-02-07</time>
+              <time title="Created: 2023-02-23 15:24:55" itemprop="dateCreated datePublished" datetime="2023-02-23T15:24:55+08:00">2023-02-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-02-24 09:02:22" itemprop="dateModified" datetime="2023-02-24T09:02:22+08:00">2023-02-24</time>
+              </span>
 
           
   
@@ -186,8 +192,8 @@
       </span>
       <span class="post-meta-item-text">Disqus: </span>
     
-    <a title="disqus" href="/2023/02/07/Debian-DPKG/#disqus_thread" itemprop="discussionUrl">
-      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/07/Debian-DPKG/" itemprop="commentCount"></span>
+    <a title="disqus" href="/2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/#disqus_thread" itemprop="discussionUrl">
+      <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -202,14 +208,26 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <blockquote>
-<p>首先，这只是一个简单的笔记，用于记录<code>dpkg</code>的使用，所以并可能并不会详细展开。</p>
-</blockquote>
-<p>dpkg是Debian的包管理工具，同时它适用与Ubuntu，最主要的用途是打包需要安装的运行库，执行程序，<br>同时用于创建，删除，管理Debian包。</p>
-<h2 id="dpkg-deb-Debian包归档工具"><a href="#dpkg-deb-Debian包归档工具" class="headerlink" title="dpkg-deb - Debian包归档工具"></a>dpkg-deb - Debian包归档工具</h2><p><code>dpkg-deb</code>用于归档生成.deb文件，用于dpkg（这里可以直接适用dpkg调用dpkg-deb）</p>
-<h3 id="dpkg包结构"><a href="#dpkg包结构" class="headerlink" title="dpkg包结构"></a>dpkg包结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;deb_dir&gt;</span><br><span class="line">    |</span><br><span class="line">    |-----DEBIAN</span><br><span class="line">    |      |-----control</span><br><span class="line">    |</span><br><span class="line">    |-----opt</span><br><span class="line">    |      |-----lib_name</span><br><span class="line">    |               |-----bin</span><br><span class="line">    |               |-----include</span><br><span class="line">    |               |-----lib</span><br></pre></td></tr></table></figure>
+        <p>首先，介绍一下<code>CMAKE_BUILD_TYPE</code>，在CMake的官网中有一段用来指出它是用于single-configuration generators的。</p>
+<p>这里，区分一下<em>single-configuration generator</em>和<em>multi-config generator</em>，<br>single-configuration generator在构建平台与环境的同时会生成构建类型，如<code>Debug</code>，<br><code>Release</code>，常见的在MacOSX上使用CLion时，默认情况下生成的是只有Debug构建环境的，而CLion默认使用的<br>是Ninja做为生成器，这里一个明显的特定是无法直接切换Debug与Release，如果要启用Release则需要<br><code>构建、执行、部署</code>，<code>Cmake</code>创建一个新的配置。multi-config generator则想Visual Studio一样，混合了多种<br>配置。</p>
+<p>而<code>CMAKE_BUILD_TYPE</code>只在single-configuration generator起作用，如下这一段<br>在MSVC下是错误的，CMAKE_BUILD_TYPE无法在MSVC中获取值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># WARNING: This is wrong for multi-config generators because they don&#x27;t use</span><br><span class="line">#          and typically don&#x27;t even set CMAKE_BUILD_TYPE</span><br><span class="line">string(TOLOWER $&#123;CMAKE_BUILD_TYPE&#125; build_type)</span><br><span class="line">if (build_type STREQUAL debug)</span><br><span class="line">  target_compile_definitions(exe1 PRIVATE DEBUG_BUILD)</span><br><span class="line">endif()</span><br></pre></td></tr></table></figure>
 
-<p>整个包结构中之后DEBIAN目录是必须的，DEBIAN目录下包含一个control文件，用于描述deb文件，<br>其他的目录将在安装时在根目录展开，如deb包下的<code>/opt/lib_name</code>路径将在被复制到<code>/opt</code>下，如果<br>lib_name不存在，同时创建lib_name目录。所以，你可以把deb下的目录理解成根目录的映射。</p>
+<p>在multi-config generator中，只能在构建时选择构建类型，这里，<br>需要借助<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)">Generator expressions</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Works correctly for both single and multi-config generators</span><br><span class="line">target_compile_definitions(exe1 PRIVATE</span><br><span class="line">  $&lt;$&lt;CONFIG:Debug&gt;:DEBUG_BUILD&gt;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>总的来说，在multi-config generator中，因为需要在构建过程中选择构建类型，直接的提供<br>CMAKE_BUILD_TYPE是无效的，因为构建类型是时刻在改变，这里需要借助Generator expressions<br>来动态修改构建类型</p>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html">cmake-buildsystem</a><blockquote>
+<p>Cmake的构建系统是高等级的抽象，用于在不同的系统，不同的生成器生成构建系统，注意，CMake本身并不参与项目<br>构建。</p>
+</blockquote>
+</li>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-generators.7.html#manual:cmake-generators(7)">cmake-generators</a><blockquote>
+<p>Cmake generator负责生成构建系统，这是cmake的核心功能。</p>
+</blockquote>
+</li>
+<li><a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#manual:cmake-generator-expressions(7)">cmake-generator-expressions</a></li>
+</ul>
 
     </div>
 
@@ -225,12 +243,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2023/02/02/CMake-rpath/" rel="prev" title="CMake rpath">
-      <i class="fa fa-chevron-left"></i> CMake rpath
+    <a href="/2023/02/15/Spring-Open-Feign/" rel="prev" title="Spring Open Feign">
+      <i class="fa fa-chevron-left"></i> Spring Open Feign
     </a></div>
       <div class="post-nav-item">
-    <a href="/2023/02/08/Spring-Bean%E7%BC%93%E5%AD%98/" rel="next" title="Spring Bean缓存">
-      Spring Bean缓存 <i class="fa fa-chevron-right"></i>
+    <a href="/2023/02/24/This-is/" rel="next" title="This is">
+      This is <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -297,7 +315,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#dpkg-deb-Debian%E5%8C%85%E5%BD%92%E6%A1%A3%E5%B7%A5%E5%85%B7"><span class="nav-number">1.</span> <span class="nav-text">dpkg-deb - Debian包归档工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dpkg%E5%8C%85%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">dpkg包结构</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%93%BE%E6%8E%A5"><span class="nav-number">1.</span> <span class="nav-text">链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -418,9 +436,9 @@
 </script>
 <script>
   var disqus_config = function() {
-    this.page.url = "https://blog.whguardian.xyz/2023/02/07/Debian-DPKG/";
-    this.page.identifier = "2023/02/07/Debian-DPKG/";
-    this.page.title = "Debian DPKG";
+    this.page.url = "https://blog.whguardian.xyz/2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/";
+    this.page.identifier = "2023/02/23/CMAKE-BUILD-TYPE-and-multi-config-generator/";
+    this.page.title = "CMAKE_BUILD_TYPE and multi-config generator";
     };
   NexT.utils.loadComments(document.querySelector('#disqus_thread'), () => {
     if (window.DISQUS) {
